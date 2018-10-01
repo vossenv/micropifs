@@ -11,7 +11,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.nar
 *.ear
@@ -23,6 +23,6 @@
 hs_err_pid*
 
 out/
-.idea/
 .gradle/
+.idea/
 build/
