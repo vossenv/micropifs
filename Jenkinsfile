@@ -1,16 +1,20 @@
-pipeline {
-	environment {
 
-	}
+
+
+
+
+
+pipeline {
+    agent any
     stages {
-        stage('Build') {
+        stage('Stage 1') {
             steps {
-				echo 'Creating version stamp...'
-				}
+                echo 'Hello world!'
             }
         }
-	post {
-        always {
+    }
+    post {
+          always {
             deleteDir() /* clean up our workspace */
         }
     }
