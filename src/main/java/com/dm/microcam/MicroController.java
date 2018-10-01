@@ -43,7 +43,7 @@ public class MicroController {
                 .body(bytes);
     }
 
-    @RequestMapping(value = "/fail", method = RequestMethod.GET, produces = MediaType.IMAG E_GIF_VALUE)
+    @RequestMapping(value = "/fail", method = RequestMethod.GET, produces = MediaType.IMAGE_GIF_VALUE)
     public ResponseEntity<InputStreamResource> getImageIRS() throws Exception {
 
 
