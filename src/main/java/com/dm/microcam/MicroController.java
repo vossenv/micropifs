@@ -17,7 +17,7 @@ public class MicroController {
 
     @RequestMapping(value = {"/simple"}, method = RequestMethod.GET)
     public Object getFrame(){
-        return "/files/test.jpg";
+        return "/files/frame.jpg";
     }
 
 
