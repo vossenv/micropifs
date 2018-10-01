@@ -13,7 +13,7 @@ pipeline {
         stage('Stage 1') {
             steps {
                 sh 'chmod +x gradlew'
-                sh './gradlew clean build'
+                sh './gradlew clean assemble'
                 dir("build/libs") {
                     stash includes: jar_file, name: 'micropicam'
                     archiveArtifacts artifacts: '**', fingerprint: true
@@ -27,7 +27,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         sh 'scp build/libs/microcam-1.0.jar pi@192.165.50.80:/usr/springboot/micropifs/micropifs.jar'
-                        sh 'ssh pi@192.165.50.80 sudo service micropifs restart'
+                        sh 'ssh pi@192.168.50.80 sudo service micropifs restart'
                     } else {
                         echo 'Not on master branch; Skipping Deploy.'
                     }
