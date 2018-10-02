@@ -21,28 +21,28 @@ public class MicroController {
     }
 
 
-    @RequestMapping(value = "/fail", method = RequestMethod.GET, produces = MediaType.IMAGE_GIF_VALUE)
-    public ResponseEntity<InputStreamResource> getImageIRS() throws Exception {
-
-        ClassPathResource imgFile = new ClassPathResource("/static/frame.gif");
-
-        while (true){
-            byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-            if (validateImage(bytes)){
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.IMAGE_GIF)
-                        .body(new InputStreamResource(imgFile.getInputStream()));
-            }
-        }
-
-
-    }
-
-    private boolean validateImage(byte[] data){
-
-        return true;
-
-    }
+//    @RequestMapping(value = "/fail", method = RequestMethod.GET, produces = MediaType.IMAGE_GIF_VALUE)
+//    public ResponseEntity<InputStreamResource> getImageIRS() throws Exception {
+//
+//        ClassPathResource imgFile = new ClassPathResource("/static/frame.gif");
+//
+//        while (true){
+//            byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+//            if (validateImage(bytes)){
+//                return ResponseEntity
+//                        .ok()
+//                        .contentType(MediaType.IMAGE_GIF)
+//                        .body(new InputStreamResource(imgFile.getInputStream()));
+//            }
+//        }
+//
+//
+//    }
+//
+//    private boolean validateImage(byte[] data){
+//
+//        return true;
+//
+//    }
 
 }

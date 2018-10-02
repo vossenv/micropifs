@@ -1,0 +1,17 @@
+
+
+[Unit]
+Description=Micro Service for Pi Images
+[Service]
+User=pi
+
+WorkingDirectory=/usr/springboot/micropifs
+ExecStart=/bin/bash /usr/springboot/micropifs/startup.sh
+SuccessExitStatus=143
+TimeoutStopSec=10
+
+#Restart=on-failure
+#RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
