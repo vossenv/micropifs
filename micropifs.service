@@ -3,8 +3,8 @@ Description=Micro Service for Pi Images
 [Service]
 User=pi
 
-WorkingDirectory=/home/pi/micropifs
-ExecStart=/bin/bash /home/pi/micropifs/startup.sh
+WorkingDirectory=/home/pi/.micropifs
+ExecStart=/bin/bash /home/pi/.micropifs/startup.sh
 SuccessExitStatus=143
 TimeoutStopSec=10
 
