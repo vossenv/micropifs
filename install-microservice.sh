@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 username="pi"
-target="192.168.50.80"
+host="192.168.50.80"
+dir="/home/pi/.micropifs"
 
 while [[ $# -gt 0 ]]
 do
 key=$1
 case $key in
-    -t)
-        target=$2
+    -h)
+        host=$2
         shift # past argument
         shift # past value
         ;;
@@ -20,10 +21,13 @@ case $key in
 esac
 done
 
-ssh ${username}@${target} bash -c "'
-sudo mkdir /home/pi/micropifs $1 &> /dev/null
+ssh ${username}@${host} bash -c "'
+sudo mkdir $dir $1 &> /dev/null
 sudo wget https://raw.githubusercontent.com/janssenda/microservice-picam/master/micropifs.service -O /etc/systemd/system/micropifs.service
-sudo wget https://raw.githubusercontent.com/janssenda/microservice-picam/master/startup.sh -O /home/pi/micropifs/startup.sh
+sudo wget https://raw.githubusercontent.com/janssenda/microservice-picam/master/startup.sh -O $dir/micropifs/startup.sh
 sudo systemctl daemon-reload
 sudo systemctl enable micropifs.service
 '"
+
+ssh $username@t$host sudo service micropifs restart
+ssh $username@t$host sudo service micropifs status
