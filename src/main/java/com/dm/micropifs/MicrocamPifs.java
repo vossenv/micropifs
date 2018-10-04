@@ -1,12 +1,12 @@
-package com.dm.microcam;
+package com.dm.micropifs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MicrocamApplication {
+public class MicrocamPifs {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MicrocamApplication.class, args);
+		SpringApplication.run(MicrocamPifs.class, args);
 	}
 }

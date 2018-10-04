@@ -16,7 +16,6 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.dm'
-version = '1.0'
 sourceCompatibility = 1.8
 
 repositories {

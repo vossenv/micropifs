@@ -1,4 +1,4 @@
-package com.dm.microcam;
+package com.dm.micropifs;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

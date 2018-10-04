@@ -1,4 +1,4 @@
-package com.dm.microcam;
+package com.dm.micropifs;
 
 
 import org.springframework.beans.factory.annotation.Value;

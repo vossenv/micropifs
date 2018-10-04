@@ -1,23 +1,25 @@
-package com.dm.microcam;
+package com.dm.micropifs;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MicroController {
 
-    @RequestMapping(value = {"/simple"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/frame"}, method = RequestMethod.GET)
     public Object getFrame(){
+
         return "/files/frame.jpg";
+
+    }
+
+    @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Object status(){
+
+        return "true";
     }
 
 

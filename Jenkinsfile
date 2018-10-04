@@ -7,7 +7,7 @@
 pipeline {
     agent any
     environment {
-        jar_file = 'microcam-1.0.jar'
+        jar_file = 'micropifs-1.0.jar'
     }
     stages {
         stage('Stage 1') {
@@ -15,19 +15,17 @@ pipeline {
                 sh 'chmod +x gradlew'
                 sh './gradlew clean assemble'
                 dir("build/libs") {
-                    stash includes: jar_file, name: 'micropicam'
+                    stash includes: jar_file, name: 'micropifs'
                     archiveArtifacts artifacts: '**', fingerprint: true
                 }
             }
-
-
         }
         stage('Deploy') {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        sh 'chmod +x install-microservice.sh'
-                        sh './install-microservice.sh -h 192.168.50.80'
+                        sh 'chmod +x deploy-artifacts.sh'
+                        sh './deploy-artifacts.sh'
                     } else {
                         echo 'Not on master branch; Skipping Deploy.'
                     }
