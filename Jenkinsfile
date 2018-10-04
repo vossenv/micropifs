@@ -7,7 +7,7 @@
 pipeline {
     agent any
     environment {
-        jar_file = 'micropifs-1.0.jar'
+        jar_file = 'micropifs.jar'
     }
     stages {
         stage('Stage 1') {
