@@ -14,10 +14,10 @@ pipeline {
             steps {
                 sh 'chmod +x gradlew'
                 sh './gradlew clean assemble'
-                dir("build/libs") {
-                    stash includes: jar_file, name: 'micropifs'
-                    archiveArtifacts artifacts: '**', fingerprint: true
-                }
+//                dir("build/libs") {
+//                    stash includes: jar_file, name: 'micropifs'
+//                    archiveArtifacts artifacts: '**', fingerprint: true
+//                }
             }
         }
         stage('Deploy') {
