@@ -2,9 +2,11 @@
 
 # username="pi"
 # host="192.168.50.80"
-# dir="/home/vagrant/.micropifs"
+# dir="/home/pi/.micropifs"
 # source="/home/Pi/Desktop"
 
+
+install="false"
 while [[ $# -gt 0 ]]
 do
 key=$1
@@ -30,13 +32,12 @@ case $key in
         shift # past value
         ;;        
     -full)
-        install=true
+        install="true"
         shift # past argument
         shift # past value
         ;;
 esac
 done
-
 
 echo ""
 echo "Initiating install with the parameters.."
@@ -54,8 +55,7 @@ fi
 
 echo ""
 
-if [[ $install == true ]]; then
-
+if [ $install = "true" ]; then
 
     echo "Installing the micropifs service..."
 
@@ -94,17 +94,24 @@ echo "----------------------------"
 [ ! -d $dir/startup.sh ] && echo "Startup file verified" || echo "Startup file failed to install"
 [ ! -d $dir/micropifs.jar ] && echo "Application verified" || echo "Application failed to install"
 echo "----------------------------"
-echo "Attempting to start service"
 
+echo "Attempting to start service"
 sudo service micropifs restart
-sleep 5
+
+for ((i=30; i>=1; i--)); do
+    sleep 1
+    echo -n "$i "
+done
+
 state=$(systemctl show -p ActiveState micropifs | sed 's/ActiveState=//g')
 
+echo ""; echo ""
 echo "Micro Pi FS is currently $state"
 echo "Testing status endpoint... "
 
-status=$(curl localhost:9001/status -s)
+apiStatus="down"
+apiStatus=$(curl localhost:9001/status -s)
 
-[[ $status -eq "true" ]] && echo "Api is running, install complete!" || "Api not running, attention needed"
+[ $apiStatus = "true" ] && echo "Api is running, install complete!" || echo "Api not running, attention needed"
 
 

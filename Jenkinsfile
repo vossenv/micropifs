@@ -25,7 +25,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         sh 'chmod +x deploy-artifacts.sh'
-                        sh './deploy-artifacts.sh'
+                        sh './deploy-artifacts.sh -h 192.168.50.80 -full'
                     } else {
                         echo 'Not on master branch; Skipping Deploy.'
                     }
