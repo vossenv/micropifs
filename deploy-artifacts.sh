@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 
 username="pi"
-host="192.168.50.80"
-
 dir="/home/pi/.micropifs"
 source="/home/pi/Desktop"
 
-scp ./install-microservice.sh $username@$host:/home/$username/install-microservice.sh
-scp build/libs/micropifs.jar $username@$host:/home/$username/micropifs.jar
-ssh $username@$host sudo sh /home/$username/install-microservice.sh -h $host -u $username -d $dir -s $source
-ssh $username@$host sudo rm /home/$username/install-microservice.sh
+hostlist=()
 
-# ssh $username@$host sudo service micropifs restart
+hostlist+=("192.168.50.80")             # Front
+#hostlist+=("192.168.50.79")            # Garage
+#hostlist+=("192.168.50.230")           # Rear IR
+
+# Windows
+# hostlist+=("192.168.50.66")
+
+
+for host in "${hostlist[@]}"
+do
+    scp ./install-microservice.sh $username@$host:/home/$username/install-microservice.sh
+    scp build/libs/micropifs.jar $username@$host:/home/$username/micropifs.jar
+    ssh $username@$host sudo sh /home/$username/install-microservice.sh -h $host -u $username -d $dir -s $source
+    ssh $username@$host sudo rm /home/$username/install-microservice.sh
+done
+
+
+
