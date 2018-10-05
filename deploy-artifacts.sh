@@ -17,7 +17,6 @@ case $key in
 esac
 done
 
-
 username="pi"
 dir="/home/pi/.micropifs"
 source="/home/pi/Desktop"
