@@ -27,6 +27,7 @@ pipeline {
                         sh 'chmod +x deploy-artifacts.sh'
                         sh './deploy-artifacts.sh -h 192.168.50.80 -full'
                         sh './deploy-artifacts.sh -h 192.168.50.79 -full'
+                        sh './deploy-artifacts.sh -h 192.168.50.230 -full'
                     } else {
                         echo 'Not on master branch; Skipping Deploy.'
                     }
