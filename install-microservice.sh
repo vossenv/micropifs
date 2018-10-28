@@ -47,11 +47,9 @@ echo "Host = $host"
 echo "Target = $dir"
 echo "Source = $source"
 
-if [ ! -d $dir ]; then
-    echo "Creating directory $dir"
-    sudo mkdir $dir
-fi
-
+sudo rm -rf $dir
+echo "Creating directory $dir"
+sudo mkdir $dir
 
 echo ""
 
@@ -96,7 +94,8 @@ echo "----------------------------"
 echo "----------------------------"
 
 echo "Attempting to start service"
-sudo service micropifs restart
+sudo service micropifs stop
+sudo service micropifs start
 
 for ((i=30; i>=1; i--)); do
     sleep 1

@@ -1,5 +1,6 @@
 package com.dm.micropifs;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -10,11 +11,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 @Controller
 public class MicroController {
+
+    @Value("${local.resource.path}")
+    String localResourcePath;
+
+    @PostConstruct
+    public void SetPath(){
+        localResourcePath = localResourcePath.replaceAll("\"","");
+        localResourcePath = (!localResourcePath.endsWith("/")) ? localResourcePath + "/" : localResourcePath;
+    }
 
     @RequestMapping(value = {"/frame_simple"}, method = RequestMethod.GET)
     public Object getFrame(){
@@ -26,7 +44,6 @@ public class MicroController {
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
     @ResponseBody
     public Object status(){
-
         return "true";
     }
 
@@ -34,22 +51,30 @@ public class MicroController {
     @RequestMapping(value = "/frame", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage() throws Exception {
 
-        ClassPathResource imgFile = new ClassPathResource("/static/frame.jpg");
-
-
         while (true) {
-            byte[] bytesA = StreamUtils.copyToByteArray(imgFile.getInputStream());
-            Thread.sleep(50);
-            byte[] bytesB = StreamUtils.copyToByteArray(imgFile.getInputStream());
 
-            if (validateImage(bytesA, bytesB)) {
+            byte [] imageA = getImage(localResourcePath + "frame.jpg");
+            Thread.sleep(50);
+            byte [] imageB = getImage(localResourcePath + "frame.jpg");
+
+            if (validateImage(imageA, imageB)) {
                 return ResponseEntity
                         .ok()
                         .contentType(MediaType.IMAGE_JPEG)
-                        .body(bytesB);
+                        .body(imageA);
             }
 
         }
+    }
+
+
+    private byte[] getImage (String path) throws IOException {
+
+        File jpegFile = new File(path);
+        BufferedImage image = ImageIO.read(jpegFile);
+        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", baos );
+        return baos.toByteArray();
     }
 
 
@@ -60,22 +85,4 @@ public class MicroController {
     }
 
 }
-//    @RequestMapping(value = "/fail", method = RequestMethod.GET, produces = MediaType.IMAGE_GIF_VALUE)
-//    public ResponseEntity<InputStreamResource> getImageIRS() throws Exception {
-//
-//        ClassPathResource imgFile = new ClassPathResource("/static/frame.gif");
-//
-//        while (true){
-//            byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-//            if (validateImage(bytes)){
-//                return ResponseEntity
-//                        .ok()
-//                        .contentType(MediaType.IMAGE_GIF)
-//                        .body(new InputStreamResource(imgFile.getInputStream()));
-//            }
-//        }
-//
-//
-//    }
-//
 
