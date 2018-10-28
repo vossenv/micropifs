@@ -54,7 +54,7 @@ public class MicroController {
         while (true) {
 
             byte [] imageA = getImage(localResourcePath + "frame.jpg");
-            Thread.sleep(50);
+            Thread.sleep(10);
             byte [] imageB = getImage(localResourcePath + "frame.jpg");
 
             if (validateImage(imageA, imageB)) {
