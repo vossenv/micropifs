@@ -1,6 +1,7 @@
 package com.dm.micropifs;
 
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -56,10 +57,13 @@ public class MicroController {
         HttpHeaders headers = new HttpHeaders();
 
         try {
-            buildHeaderList(getCurrentLog()).forEach(headers::add);
+            headers.add("Properties", new JSONObject(buildHeaderList(getCurrentLog())).toString());
+            //buildHeaderList(getCurrentLog()).forEach(headers::add);
         } catch (Exception e){
             headers.add("Data-Error", e.getMessage());
         }
+
+
 
         return ResponseEntity
                 .ok()
@@ -78,7 +82,7 @@ public class MicroController {
         for (String l : lines) {
 
             String [] pair = l.split(":");
-            String k = pair[0].replaceAll("[\\s_]","-");
+            String k = pair[0]; //.replaceAll("[\\s_]","-");
             String v = (pair.length > 1) ? l.substring(k.length()+1,l.length()-1) : "no data";
 
             headers.put(k.trim(), v.trim());

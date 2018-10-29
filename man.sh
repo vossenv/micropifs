@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+./gradlew build
 
 ./deploy-artifacts.sh -h 192.168.50.80 -full
 ./deploy-artifacts.sh -h 192.168.50.79 -full
