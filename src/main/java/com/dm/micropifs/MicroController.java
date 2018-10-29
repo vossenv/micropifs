@@ -78,7 +78,7 @@ public class MicroController {
         for (String l : lines) {
 
             String [] pair = l.split(":");
-            String k = pair[0].replaceAll("[\\s]","-");
+            String k = pair[0].replaceAll("[\\s_]","-");
             String v = (pair.length > 1) ? l.substring(k.length()+1,l.length()-1) : "no data";
 
             headers.put(k.trim(), v.trim());
