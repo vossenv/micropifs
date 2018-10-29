@@ -1,12 +1,11 @@
 package com.dm.micropifs;
 
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,13 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class MicroController {
@@ -36,9 +35,12 @@ public class MicroController {
 
     @RequestMapping(value = {"/frame_simple"}, method = RequestMethod.GET)
     public Object getFrame(){
-
         return "/files/frame.jpg";
+    }
 
+    @RequestMapping(value = {"/log"}, method = RequestMethod.GET)
+    public Object getLog(){
+        return "/files/camlog.txt";
     }
 
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
@@ -47,41 +49,86 @@ public class MicroController {
         return "true";
     }
 
-
     @RequestMapping(value = "/frame", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage() throws Exception {
+    public ResponseEntity<byte[]> getFrameData() throws Exception{
 
-        while (true) {
+        byte [] image = getCurrentFrame();
+        HttpHeaders headers = new HttpHeaders();
 
-            byte [] imageA = getImage(localResourcePath + "frame.jpg");
-            Thread.sleep(10);
-            byte [] imageB = getImage(localResourcePath + "frame.jpg");
-
-            if (validateImage(imageA, imageB)) {
-                return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(imageA);
-            }
-
+        try {
+            buildHeaderList(getCurrentLog()).forEach(headers::add);
+        } catch (Exception e){
+            headers.add("Data-Error", e.getMessage());
         }
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
+    }
+
+    private Map<String,String> buildHeaderList(String raw){
+
+        Map<String,String> headers = new HashMap<>();
+
+        String nl = raw.contains("\r\n") ? "\r\n" : "\n";
+        String [] lines = raw.split(nl);
+
+        for (String l : lines) {
+
+            String [] pair = l.split(":");
+            String k = pair[0].replaceAll("[\\s]","-");
+            String v = (pair.length > 1) ? l.substring(k.length()+1,l.length()-1) : "no data";
+
+            headers.put(k.trim(), v.trim());
+        }
+        return headers;
+    }
+
+    private byte [] getCurrentFrame() throws Exception{
+
+        for (int i = 0; i < 100; i++){
+            byte[] img = readFrame();
+            Thread.sleep(10);
+            if (validateData(img, readFrame())) { return img; }
+        }
+
+        throw new IOException("Error reading image");
     }
 
 
-    private byte[] getImage (String path) throws IOException {
+    private String getCurrentLog() throws Exception {
 
-        File jpegFile = new File(path);
+
+        for (int i = 0; i < 100; i++){
+            byte[] data = readLog();
+            Thread.sleep(10);
+            if (validateData(data, readLog())){ return new String(data); }
+        }
+
+        throw new IOException("Error reading logfile");
+
+    }
+
+    private byte[] readLog() throws Exception {
+
+        File f = new File(localResourcePath + "camlog.txt");
+        return Files.readAllBytes(f.toPath());
+
+    }
+
+    private byte[] readFrame() throws Exception {
+
+        File jpegFile = new File(localResourcePath + "frame.jpg");
         BufferedImage image = ImageIO.read(jpegFile);
         ByteArrayOutputStream baos=new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", baos );
         return baos.toByteArray();
     }
 
-
-    private boolean validateImage(byte[] dataA, byte[] dataB){
-
+    private boolean validateData(byte[] dataA, byte[] dataB){
        return Arrays.equals(dataA, dataB);
-
     }
 
 }
