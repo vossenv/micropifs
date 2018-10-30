@@ -58,12 +58,15 @@ public class MicroController {
 
         try {
             headers.add("Properties", new JSONObject(buildHeaderList(getCurrentLog())).toString());
-            //buildHeaderList(getCurrentLog()).forEach(headers::add);
+            buildHeaderList(getCurrentLog()).forEach(headers::add);
         } catch (Exception e){
             headers.add("Data-Error", e.getMessage());
         }
 
 
+        Map<String, byte[]> resp = new HashMap<>();
+
+        resp.put(new JSONObject(buildHeaderList(getCurrentLog())).toString(), image);
 
         return ResponseEntity
                 .ok()
