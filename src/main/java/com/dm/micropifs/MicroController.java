@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,9 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
 public class MicroController {
@@ -57,16 +58,10 @@ public class MicroController {
         HttpHeaders headers = new HttpHeaders();
 
         try {
-            headers.add("Properties", new JSONObject(buildHeaderList(getCurrentLog())).toString());
             buildHeaderList(getCurrentLog()).forEach(headers::add);
         } catch (Exception e){
             headers.add("Data-Error", e.getMessage());
         }
-
-
-        Map<String, byte[]> resp = new HashMap<>();
-
-        resp.put(new JSONObject(buildHeaderList(getCurrentLog())).toString(), image);
 
         return ResponseEntity
                 .ok()
@@ -74,6 +69,7 @@ public class MicroController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
+
 
     private Map<String,String> buildHeaderList(String raw){
 
@@ -85,12 +81,25 @@ public class MicroController {
         for (String l : lines) {
 
             String [] pair = l.split(":");
-            String k = pair[0]; //.replaceAll("[\\s_]","-");
-            String v = (pair.length > 1) ? l.substring(k.length()+1,l.length()-1) : "no data";
+            String k = validateKey(pair[0]);
+            String v = (pair.length > 1) ? l.substring(pair[0].length()+1,l.length()-1) : "no data";
 
-            headers.put(k.trim(), v.trim());
+            headers.put(k, v.trim());
         }
         return headers;
+    }
+
+    private String validateKey(String raw){
+
+        List<String> pieces = new ArrayList<>();
+        String [] x = raw.split("[^a-zA-Z\\d:]");
+
+        for (String w : x)
+             if (!w.isEmpty()) {
+                 pieces.add(capitalize(w));
+             }
+
+        return String.join("-",pieces.toArray(new String[0]));
     }
 
     private byte [] getCurrentFrame() throws Exception{
