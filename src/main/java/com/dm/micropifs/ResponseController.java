@@ -23,7 +23,7 @@ import java.util.*;
 import static org.springframework.util.StringUtils.capitalize;
 
 @Controller
-public class MicroController {
+public class ResponseController {
 
     @Value("${local.resource.path}")
     String localResourcePath;
