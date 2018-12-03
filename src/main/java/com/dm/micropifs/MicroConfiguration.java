@@ -15,9 +15,8 @@ public class MicroConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        String dir = this.localResourcePath.replaceAll("\"","");
-        dir = (!dir.endsWith("/")) ? dir + "/" : dir;
-        dir = (dir.startsWith("classpath")) ? dir : "file:" + dir;
+        localResourcePath = localResourcePath.replaceAll("\"","");
+        localResourcePath = (!localResourcePath.endsWith("/")) ? localResourcePath + "/" : localResourcePath;
 
 
         registry.addResourceHandler("/static/**")
@@ -25,7 +24,14 @@ public class MicroConfiguration implements WebMvcConfigurer {
 
         registry
                 .addResourceHandler("/files/**")
-                .addResourceLocations(dir);
+                .addResourceLocations(localResourcePath);
     }
 
+    public String getLocalResourcePath() {
+        return localResourcePath;
+    }
+
+    public void setLocalResourcePath(String localResourcePath) {
+        this.localResourcePath = localResourcePath;
+    }
 }

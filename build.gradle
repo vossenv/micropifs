@@ -25,5 +25,6 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile ('javax.inject:javax.inject:1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
