@@ -76,7 +76,9 @@ public class MicroController {
     public String uploadFile(@RequestParam MultipartFile file, HttpServletRequest request) throws Exception {
         store.add(new PiImage(request,file));
         this.count += 1;
+        System.out.println(this.count);
         return "Success --> total count: " + this.count;
+
     }
 
 }
