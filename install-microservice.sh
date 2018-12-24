@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# username="pi"
-# host="192.168.50.80"
-# dir="/home/pi/.micropifs"
-# source="/home/Pi/Desktop"
-
 
 install="false"
 while [[ $# -gt 0 ]]
@@ -14,11 +9,6 @@ case $key in
     -h)
         host=$2
         shift # past argumentls
-        shift # past value
-        ;;
-    -u)
-        username=$2
-        shift # past argument
         shift # past value
         ;;
     -d)
@@ -31,18 +21,12 @@ case $key in
         shift # past argument
         shift # past value
         ;;        
-    -full)
-        install="true"
-        shift # past argument
-        shift # past value
-        ;;
 esac
 done
 
 echo ""
 echo "Initiating install with the parameters.."
 echo ""
-echo "Username = $username"
 echo "Host = $host"
 echo "Target = $dir"
 echo "Source = $source"
@@ -52,13 +36,10 @@ echo "Creating directory $dir"
 sudo mkdir $dir
 
 echo ""
+echo "Installing the micropifs service..."
 
-if [ $install = "true" ]; then
-
-    echo "Installing the micropifs service..."
-
-    sudo mv micropifs.jar $dir
-    sudo tee /etc/systemd/system/micropifs.service <<-EOF > /dev/null
+sudo mv micropifs.jar $dir
+sudo tee /etc/systemd/system/micropifs.service <<-EOF > /dev/null
 #!/usr/bin/env bash
 [Unit]
 Description=Micro Service for Pi Images
@@ -82,35 +63,43 @@ sudo tee $dir/startup.sh <<-EOF > /dev/null
 sudo /usr/bin/java -jar micropifs.jar --local.resource.path="$source"
 EOF
 
-    sudo systemctl daemon-reload
-    sudo systemctl enable micropifs.service
-    echo ""
-fi
+sudo systemctl daemon-reload
+sudo systemctl enable micropifs.service
+echo ""
+
 
 echo "----------------------------"
 [ ! -d /etc/systemd/system/micropifs.service ] && echo "Service verified" || echo "Service failed to install"
 [ ! -d $dir/startup.sh ] && echo "Startup file verified" || echo "Startup file failed to install"
 [ ! -d $dir/micropifs.jar ] && echo "Application verified" || echo "Application failed to install"
 echo "----------------------------"
-
+echo ""
 echo "Attempting to start service"
 sudo service micropifs stop
 sudo service micropifs start
 
-for ((i=30; i>=1; i--)); do
+echo ""
+
+apiStatus="down"
+count=0
+
+
+while [ "$apiStatus" != "true" ]; do
+
+    if [ "$count" -gt 50 ]; then break; fi
+
+    apiStatus=$(curl localhost:9001/status -s)    
+    count=$((count + 1))
+
     sleep 1
-    echo -n "$i "
+    echo -n "$count "
 done
 
 state=$(systemctl show -p ActiveState micropifs | sed 's/ActiveState=//g')
 
 echo ""; echo ""
 echo "Micro Pi FS is currently $state"
-echo "Testing status endpoint... "
 
-apiStatus="down"
-apiStatus=$(curl localhost:9001/status -s)
-
-[ $apiStatus = "true" ] && echo "Api is running, install complete!" || echo "Api not running, attention needed"
+[ "$apiStatus" = "true" ] && echo "Api is running, install complete!" || echo "Api not running, attention needed"
 
 

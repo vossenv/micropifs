@@ -1,3 +1,0 @@
-Percent motion: 000
-s1: aaa
-s2: bbb:ccc::CCC

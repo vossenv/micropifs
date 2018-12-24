@@ -26,3 +26,4 @@ out/
 .gradle/
 .idea/
 build/
+.vscode/
