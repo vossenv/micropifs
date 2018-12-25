@@ -63,8 +63,8 @@ function deployOnWinTarget {
     printColor "\n---------- Deploy on $1 completed ----------\n" "blue"
 }
 
-for i in ${ipaddresses[@]}; do
-    #deployOnLinuxTarget $i && printf "" || echo "Deploy to $i failed... continuing"
-done
+# for i in ${ipaddresses[@]}; do
+#     deployOnLinuxTarget $i && printf "" || echo "Deploy to $i failed... continuing"
+# done
 
 deployOnWinTarget "192.168.50.66" && printf "" || echo "Deploy to $i failed... continuing"
