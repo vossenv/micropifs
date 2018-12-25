@@ -58,13 +58,13 @@ function deployOnWinTarget {
     printColor "\nDeploying on $1... (Windows)\n" "green"
 
     scp build/libs/micropifs.jar jenkins@$1:"C:/Program\\ Files\\ (x86)/micropifs/micropifs.jar"
-    timeout 10 ssh jenkins@$1 "Restart-Service -Name micropifs -NoWait"
+    timeout 10 ssh jenkins@$1 Restart-Service -Name micropifs
 
     printColor "\n---------- Deploy on $1 completed ----------\n" "blue"
 }
 
 for i in ${ipaddresses[@]}; do
-    deployOnLinuxTarget $i && printf "" || echo "Deploy to $i failed... continuing"
+    #deployOnLinuxTarget $i && printf "" || echo "Deploy to $i failed... continuing"
 done
 
 deployOnWinTarget "192.168.50.66" && printf "" || echo "Deploy to $i failed... continuing"
