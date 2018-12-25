@@ -2,7 +2,6 @@
 
 
 ipaddresses=(
-    "192.168.50.58"
     "192.168.50.59"
     "192.168.50.230"
     "192.168.50.227"
@@ -38,7 +37,7 @@ function printColor(){
               *) col=7;;
     esac
 
-    printf "$(tput setaf $col)$1$(tput sgr 0)\n"
+    printf "$1\n"
 }
 
 function deployOnLinuxTarget() {
