@@ -24,7 +24,7 @@ public class MicroController {
     private final DataStore dataStore;
     private final HttpTools httpTools;
 
-    private static List<PiImage> store = new Deque<>(15);
+    private static List<PiImage> store = new Deque<>(5);
     private int count = 0;
 
     @Inject
