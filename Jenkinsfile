@@ -22,9 +22,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'echo $PWD'
-                    sh 'chmod +x deploy-artifacts.sh'
-                    sh './deploy-artifacts.sh'
+                    sh 'chmod +x deploy.sh'
+                    sh './deploy.sh'
                 }
             }
         }
