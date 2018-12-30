@@ -67,6 +67,8 @@ while [ "$apiStatus" != "true" ]; do
     echo -n "$count "
 done
 
+echo -e "\n\n"
+
 [ "$apiStatus" = "true" ] && echo "Api is running, install complete!" || echo "Service not running, attention needed"
 
 echo ""
