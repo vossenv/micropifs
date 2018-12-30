@@ -12,6 +12,9 @@ public class MicroConfiguration implements WebMvcConfigurer {
     @Value("${local.resource.path}")
     private String localResourcePath;
 
+    @Value("${local.storage.path}")
+    private String localStoragePath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -22,16 +25,14 @@ public class MicroConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
 
-        registry
-                .addResourceHandler("/files/**")
-                .addResourceLocations(localResourcePath);
     }
 
     public String getLocalResourcePath() {
         return localResourcePath;
     }
 
-    public void setLocalResourcePath(String localResourcePath) {
-        this.localResourcePath = localResourcePath;
+    public String getLocalStoragePath() {
+        return localStoragePath;
     }
 }
+
