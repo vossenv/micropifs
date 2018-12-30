@@ -1,6 +1,5 @@
 package com.dm.micropifs;
 
-
 import com.dm.micropifs.fileio.DataStore;
 import com.dm.micropifs.model.PiImage;
 import com.dm.micropifs.util.Deque;
@@ -31,14 +30,11 @@ public class MicroController {
 
     @ResponseBody
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
-    public Object status() {
-        return "true";
-    }
+    public String status() { return "true"; }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public Object index() {
-        return "/static/index.html";
-    }
+    public Object index() { return "/static/index.html"; }
+
 
     @RequestMapping(value = "/next", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Object> getNext() {
@@ -55,7 +51,6 @@ public class MicroController {
     public String uploadFile(@RequestParam MultipartFile file, HttpServletRequest request) throws Exception {
         store.add(new PiImage(request,file));
         this.count += 1;
-        System.out.println(this.count);
         return "Success --> total count: " + this.count;
     }
 
