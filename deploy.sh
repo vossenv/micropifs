@@ -5,7 +5,8 @@ ipaddresses=(
     "192.168.50.230:linux:pi"
     "192.168.50.227:linux:pi"
     "192.168.50.66:windows:jenkins"
-    # "192.168.50.139:windows:carag"
+    "192.168.50.78:linux:pi"
+    #"192.168.50.139:windows:carag"
 )
 
 # ./gradlew clean assemble
