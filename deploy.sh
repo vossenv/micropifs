@@ -39,7 +39,7 @@ for i in ${ipaddresses[@]}; do
     platform=${tokens[1]}
     username=${tokens[2]}
     
-    printf "\n===== Begin deploy: $platform / $2 / $host =====\n\n"
+    printf "\n===== Begin deploy: $platform / $username / $host =====\n\n"
     
     if [ "$platform" == "windows" ]; then 
         deployWin $host $username
