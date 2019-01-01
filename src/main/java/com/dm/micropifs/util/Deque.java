@@ -2,6 +2,7 @@ package com.dm.micropifs.util;
 
 import java.util.LinkedList;
 
+
 public class Deque<Object> extends LinkedList<Object> {
 
     private int maxsize;

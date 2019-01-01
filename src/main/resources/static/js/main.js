@@ -1,44 +1,36 @@
 "use strict";
 jQuery(function () {
 
-    refresh2()
+    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+    var camID;
+
+    for (var k in url) {
+
+        console.log(k);
+
+        console.log("");
+
+    }
+
+    // for (var i = 0; i < url.length; i++) {
+    //     var urlparam = url[i].split('=');
+    //     if (urlparam[0].toLowerCase() !== 'camid') {
+    //         continue;
+    //     }
+    //     camID = urlparam[1];
+    // }
+    // update()
 
 });
 
-
-// function refresh() {
-//     var strImageUrl = "http://localhost:9001/frame?" + Date.now();
-//     var img = new Image();
-//     img.onload = function () {
-//         $("#img").attr('src', strImageUrl);
-//         refresh();
-//     };
-//     img.src = strImageUrl;
-// }
-
-function refresh2() {
+function update() {
     var strImageUrl = "/next?" + Date.now();
 
     var img = new Image();
     img.onload = function () {
         $("#img").attr('src', strImageUrl);
-        refresh2();
+        update();
     };
     img.src = strImageUrl;
 }
-// function refresh() {
-//
-//     $.ajax({
-//         url: "/frame",
-//         type: 'GET',
-//         contentType: 'application/json',
-//         success: function (data, status, xhr) {
-//             // console.log(xhr.getResponseHeader("Percent-Motion"));
-//             $("#info").html(xhr.getResponseHeader("Percent-Motion"));
-//             $("#img").attr('src',"/frame?" + Date.now());
-//             refresh()
-//         }
-//
-//     });
-//
-// }
