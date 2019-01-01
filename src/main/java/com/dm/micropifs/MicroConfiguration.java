@@ -26,7 +26,7 @@ public class MicroConfiguration implements WebMvcConfigurer {
             localStoragePath = home.getDir().getAbsolutePath();
         }
 
-        localStoragePath = String.join(File.separator, DataStore.pathSplit(localStoragePath));
+        localStoragePath = String.join(File.separator, DataStore.fixPath(localStoragePath));
 
     }
 

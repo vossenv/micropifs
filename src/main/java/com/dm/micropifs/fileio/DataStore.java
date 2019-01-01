@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public class DataStore {
 
     private final MicroConfiguration mc;
+    private final String sep = File.separator;
 
     @Inject
     public DataStore(MicroConfiguration microConfiguration) {
@@ -26,29 +27,27 @@ public class DataStore {
         String path = request.getHeader("File-Destination");
         String type = request.getHeader("Path-Type");
 
-        if (!(type != null && type.equals("absolute"))) {
-            path = mc.getLocalStoragePath() + File.separator + path;
-        }
+        String prepend = type != null && type.equals("absolute") ? "" : mc.getLocalStoragePath();
+        path = fixPath(path == null || path.isEmpty() ? mc.getLocalStoragePath() : prepend + sep + path);
 
-        path = String.join(File.separator, pathSplit(path));
         new File(path).mkdirs();
 
-        String fullpath = path + File.separator + file.getOriginalFilename();
+        String fullpath = path + sep + file.getOriginalFilename();
         file.transferTo(new File(fullpath));
         return "File succesfully stored: " + fullpath;
     }
 
-    public static List<String> pathSplit(String path) {
+    public static String fixPath(String path) {
         path = path
                 .replace("\\", File.separator)
                 .replace("/", File.separator)
                 .replace("\"", "")
                 .replace("'", "");
 
-        return filterSeparators(path);
+        return String.join(File.separator, splitPath(path));
     }
 
-    private static List<String> filterSeparators(String path) {
+    private static List<String> splitPath(String path) {
         List<String> dirs = new LinkedList<>();
         String pattern = Pattern.quote(System.getProperty("file.separator"));
         for (String f : path.split(pattern)) if (!f.isEmpty()) dirs.add(f);
