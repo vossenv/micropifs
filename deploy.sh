@@ -4,12 +4,12 @@ ipaddresses=(
     "192.168.50.59:linux:pi"
     "192.168.50.230:linux:pi"
     "192.168.50.227:linux:pi"
-    "192.168.50.66:windows:jenkins"
     "192.168.50.78:linux:pi"
-    #"192.168.50.139:windows:carag"
+    "192.168.50.66:windows:jenkins"
+    "192.168.50.139:windows:jenkins"
 )
 
-# ./gradlew clean assemble
+./gradlew clean assemble
 
 service_name="micropifs"
 
@@ -24,11 +24,15 @@ function deployBash() {
 
 function deployWin() {
 
-    scp build/libs/micropifs.jar $2@$1:"C:/Program\\ Files\\ (x86)/micropifs/micropifs.jar"
+    printf "Stopping service.... \n"
+    timeout 5 ssh $2@$1 Stop-Service -Name Micropifs
 
-    printf "\n Starting service.... \n"
+    printf "\nBegin file transfer... \n"
+    scp build/libs/micropifs.jar $2@$1:"C:/Program\\ Files\\ (x86)/Micropifs/micropifs.jar"
 
-    timeout 10 ssh $2@$1 Restart-Service -Name micropifs
+    printf "\nStarting service.... \n"
+
+    timeout 10 ssh $2@$1 Start-Service -Name Micropifs
 }
 
 for i in ${ipaddresses[@]}; do
