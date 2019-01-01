@@ -29,7 +29,7 @@ public class MicroConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
-                .addResourceLocations("classlocalStoragePath:/static/");
+                .addResourceLocations("classPath:/static/");
     }
 
     public String getLocalStoragePath() {

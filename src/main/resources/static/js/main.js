@@ -2,35 +2,25 @@
 jQuery(function () {
 
     var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    var params = {};
+    $(url).each( function( index, value ) {
+        var p = value.split('=');
+        params[p[0].toLowerCase()] = p[1].toLowerCase();
+    });
 
-    var camID;
+    $("#img").attr('src', "http://localhost:9001/cameras/" + params['camid'] + "/next");
 
-    for (var k in url) {
-
-        console.log(k);
-
-        console.log("");
-
-    }
-
-    // for (var i = 0; i < url.length; i++) {
-    //     var urlparam = url[i].split('=');
-    //     if (urlparam[0].toLowerCase() !== 'camid') {
-    //         continue;
-    //     }
-    //     camID = urlparam[1];
-    // }
-    // update()
+    update(params);
 
 });
 
-function update() {
-    var strImageUrl = "/next?" + Date.now();
+function update(p) {
 
+    var strImageUrl = "/cameras/" + p['camid'] + "/next?" + Date.now();
     var img = new Image();
     img.onload = function () {
         $("#img").attr('src', strImageUrl);
-        update();
+        update(p);
     };
     img.src = strImageUrl;
 }
