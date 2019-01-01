@@ -35,7 +35,6 @@ public class MicroController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Object index() { return "/static/index.html"; }
 
-
     @RequestMapping(value = "/next", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Object> getNext() {
         PiImage next = store.get(0);
@@ -49,15 +48,25 @@ public class MicroController {
     @ResponseBody
     @RequestMapping(value = {"/receive"}, method = RequestMethod.POST)
     public String uploadFile(@RequestParam MultipartFile file, HttpServletRequest request) throws Exception {
-        store.add(new PiImage(request,file));
-        this.count += 1;
-        return "Success --> total count: " + this.count;
+
+        try{
+            store.add(new PiImage(request,file));
+            this.count += 1;
+            return "Success --> total count: " + this.count;
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 
     @ResponseBody
     @RequestMapping(value = {"/store"}, method = RequestMethod.POST)
-    public String storeFile(@RequestParam MultipartFile file) throws Exception{
-        return ds.store(file);
+    public Object storeFile(@RequestParam MultipartFile file, HttpServletRequest request) throws Exception{
+        try{
+            return ds.store(request,file);
+        } catch (Exception e){
+            return e.getMessage();
+        }
     }
 
 }
