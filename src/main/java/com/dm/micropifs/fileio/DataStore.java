@@ -26,12 +26,10 @@ public class DataStore {
 
         String path = request.getHeader("File-Destination");
         String type = request.getHeader("Path-Type");
-
         String prepend = type != null && type.equals("absolute") ? "" : mc.getLocalStoragePath();
         path = fixPath(path == null || path.isEmpty() ? mc.getLocalStoragePath() : prepend + sep + path);
 
         new File(path).mkdirs();
-
         String fullpath = path + sep + file.getOriginalFilename();
         file.transferTo(new File(fullpath));
         return "File succesfully stored: " + fullpath;

@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 
 
 @Configuration
@@ -20,14 +19,8 @@ public class MicroConfiguration implements WebMvcConfigurer {
 
     @PostConstruct
     void setStoragePath(){
-
-        if (localStoragePath.equals("default")) {
-            ApplicationHome home = new ApplicationHome(MicrocamPifs.class);
-            localStoragePath = home.getDir().getAbsolutePath();
-        }
-
-        localStoragePath = String.join(File.separator, DataStore.fixPath(localStoragePath));
-
+        if (localStoragePath.equals("default")) localStoragePath = new ApplicationHome(MicrocamPifs.class).getDir().getAbsolutePath();
+        localStoragePath = DataStore.fixPath(localStoragePath);
     }
 
     @Override
