@@ -27,7 +27,7 @@ public class DataStore {
         String type = request.getHeader("Path-Type");
 
         if (!(type != null && type.equals("absolute"))) {
-            path = mc.getLocalStoragePath() + path;
+            path = mc.getLocalStoragePath() + File.separator + path;
         }
 
         path = String.join(File.separator, pathSplit(path));
