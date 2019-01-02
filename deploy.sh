@@ -22,7 +22,9 @@ function deployBash() {
     if [ $2 == "self" ]; then
         printf "\nDeploying to self... \n"
         local dir="/home/carag/.$service_name"
-        sudo  sudo chmod +x install-microservice-bash.sh
+        sudo rm -rf $dir; echo "Creating directory $dir";  sudo mkdir $dir; sudo chmod 777 $dir;
+        sudo sudo chmod +x install-microservice-bash.sh
+        sudo cp build/libs/micropifs.jar $dir
         sudo ./install-microservice-bash.sh "$dir" "$script" "$service_name"
     else
         local dir="/home/$2/.$service_name"
