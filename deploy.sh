@@ -17,16 +17,16 @@ service_name="micropifs"
 
 function deployBash() {
 
-    local script="sudo\ /usr/bin/java\ -jar\ micropifs.jar"
-
     if [ $2 == "self" ]; then
         printf "\nDeploying to self... \n"
+        local script="sudo /usr/bin/java -jar micropifs.jar"
         local dir="/home/carag/.$service_name"
         sudo rm -rf $dir; echo "Creating directory $dir";  sudo mkdir $dir; sudo chmod 777 $dir;
         sudo sudo chmod +x install-microservice-bash.sh
         sudo cp build/libs/micropifs.jar $dir
         sudo ./install-microservice-bash.sh "$dir" "$script" "$service_name"
     else
+        local script="sudo\ /usr/bin/java\ -jar\ micropifs.jar"
         local dir="/home/$2/.$service_name"
         ssh $2@$1 "sudo rm -rf $dir; echo "Creating directory $dir";  sudo mkdir $dir; sudo chmod 777 $dir;"
         scp build/libs/micropifs.jar $2@$1:$dir
