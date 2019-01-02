@@ -1,6 +1,7 @@
 package com.dm.micropifs;
 
 import com.dm.micropifs.fileio.DataStore;
+import com.dm.micropifs.logging.FileLogger;
 import com.dm.micropifs.model.PiImage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,11 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Controller
 public class MicroController {
 
     private final DataStore ds;
+
+    private final static Logger logger = FileLogger.getLogger();
 
     @Inject
     public MicroController(DataStore ds) {
@@ -25,7 +30,17 @@ public class MicroController {
     @ResponseBody
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
     public String status() {
+
+
+        logger.setLevel(Level.INFO);
+        logger.severe("Info Log");
+        logger.warning("Info Log");
+        logger.info("Info Log");
+        logger.finest("Really not important");
+
+
         return "true";
+
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
