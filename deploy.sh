@@ -21,7 +21,7 @@ function deployBash() {
 
     if [ $2 == "self" ]; then
         printf "\nDeploying to self... \n"
-        local dir="/home/jenkins/.$service_name"
+        local dir="/home/carag/.$service_name"
         sudo  sudo chmod +x install-microservice-bash.sh
         sudo ./install-microservice-bash.sh "$dir" "$script" "$service_name"
     else
