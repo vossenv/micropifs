@@ -17,6 +17,9 @@ public class MicroConfiguration implements WebMvcConfigurer {
     @Value("${local.storage.path}")
     private String localStoragePath;
 
+    @Value("${camera.buffer.size}")
+    private int camBufferSize;
+
     @PostConstruct
     void setStoragePath(){
         if (localStoragePath.equals("default")) localStoragePath = new ApplicationHome(MicrocamPifs.class).getDir().getAbsolutePath();
@@ -26,11 +29,15 @@ public class MicroConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
-                .addResourceLocations("classlocalStoragePath:/static/");
+                .addResourceLocations("classPath:/static/");
     }
 
     public String getLocalStoragePath() {
         return localStoragePath;
+    }
+
+    public int getCamBufferSize() {
+        return camBufferSize;
     }
 }
 

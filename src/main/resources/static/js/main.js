@@ -1,44 +1,26 @@
 "use strict";
 jQuery(function () {
 
-    refresh2()
+    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    var params = {};
+    $(url).each( function( index, value ) {
+        var p = value.split('=');
+        params[p[0].toLowerCase()] = p[1].toLowerCase();
+    });
+
+    $("#img").attr('src', "http://localhost:9001/cameras/" + params['camid'] + "/next");
+
+    update(params);
 
 });
 
+function update(p) {
 
-// function refresh() {
-//     var strImageUrl = "http://localhost:9001/frame?" + Date.now();
-//     var img = new Image();
-//     img.onload = function () {
-//         $("#img").attr('src', strImageUrl);
-//         refresh();
-//     };
-//     img.src = strImageUrl;
-// }
-
-function refresh2() {
-    var strImageUrl = "/next?" + Date.now();
-
+    var strImageUrl = "/cameras/" + p['camid'] + "/next?" + Date.now();
     var img = new Image();
     img.onload = function () {
         $("#img").attr('src', strImageUrl);
-        refresh2();
+        update(p);
     };
     img.src = strImageUrl;
 }
-// function refresh() {
-//
-//     $.ajax({
-//         url: "/frame",
-//         type: 'GET',
-//         contentType: 'application/json',
-//         success: function (data, status, xhr) {
-//             // console.log(xhr.getResponseHeader("Percent-Motion"));
-//             $("#info").html(xhr.getResponseHeader("Percent-Motion"));
-//             $("#img").attr('src',"/frame?" + Date.now());
-//             refresh()
-//         }
-//
-//     });
-//
-// }
