@@ -7,7 +7,7 @@ ipaddresses=(
 #    "192.168.50.78:linux:pi"
 #    "192.168.50.66:windows:jenkins"
     "192.168.50.139:windows:jenkins"
-    "192.168.50.187:linux:carag"
+    "192.168.50.187:linux:self"
 )
 
 #./gradlew clean assemble
@@ -16,25 +16,30 @@ service_name="micropifs"
 
 function deployBash() {
 
-    local dir="/home/$2/.$service_name"
     local script="sudo\ /usr/bin/java\ -jar\ micropifs.jar"
-    ssh $2@$1 "sudo rm -rf $dir; echo "Creating directory $dir";  sudo mkdir $dir; sudo chmod 777 $dir;"
-    scp build/libs/micropifs.jar $2@$1:$dir
-    ssh $2@$1 'bash -s' < ./install-microservice-bash.sh "$dir" "$script" "$service_name"
+
+    if [ $2 == "self" ]; then
+        printf "\nDeploying to self... \n"
+        local dir="/home/jenkins/.$service_name"
+        sudo ./install-microservice-bash.sh "$dir" "$script" "$service_name"
+    else
+        local dir="/home/$2/.$service_name"
+        ssh $2@$1 "sudo rm -rf $dir; echo "Creating directory $dir";  sudo mkdir $dir; sudo chmod 777 $dir;"
+        scp build/libs/micropifs.jar $2@$1:$dir
+        ssh $2@$1 'bash -s' < ./install-microservice-bash.sh "$dir" "$script" "$service_name"
+    fi
 
 }
 
 function removeBash(){
 
     local dir="/home/$2/.$service_name"
-
     ssh $2@$1 "echo "Stopping service $service_name";  sudo service $service_name stop; sudo systemctl disable $service_name.service"
     ssh $2@$1 "echo "Removing directory $dir";  sudo rm -rf $dir;"
     ssh $2@$1 "echo "Removing configuration";  sudo rm /etc/systemd/system/$service_name.service;"
     ssh $2@$1 "echo "Reload services";  sudo systemctl daemon-reload;"
     printf "\nFinished removal of $service_name\n"
 
-sudo
 
 }
 
