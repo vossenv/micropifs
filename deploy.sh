@@ -6,8 +6,9 @@ ipaddresses=(
 #    "192.168.50.227:linux:pi"
 #    "192.168.50.78:linux:pi"
 #    "192.168.50.66:windows:jenkins"
-    "192.168.50.139:windows:jenkins"
+#    "192.168.50.139:windows:jenkins"
     "192.168.50.187:linux:self"
+#    "192.168.50.187:linux:carag"
 )
 
 #./gradlew clean assemble
@@ -21,6 +22,7 @@ function deployBash() {
     if [ $2 == "self" ]; then
         printf "\nDeploying to self... \n"
         local dir="/home/jenkins/.$service_name"
+        sudo  sudo chmod +x install-microservice-bash.sh
         sudo ./install-microservice-bash.sh "$dir" "$script" "$service_name"
     else
         local dir="/home/$2/.$service_name"
