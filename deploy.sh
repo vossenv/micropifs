@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 ipaddresses=(
-    "192.168.50.59:linux:pi"
-    "192.168.50.230:linux:pi"
-    "192.168.50.227:linux:pi"
-    "192.168.50.78:linux:pi"
+#    "192.168.50.59:linux:pi"
+#    "192.168.50.230:linux:pi"
+#    "192.168.50.227:linux:pi"
+#    "192.168.50.78:linux:pi"
 #    "192.168.50.66:windows:jenkins"
-#    "192.168.50.139:windows:jenkins"
-#    "192.168.50.187:linux:carag"
+    "192.168.50.139:windows:jenkins"
+    "192.168.50.187:linux:carag"
 )
 
-./gradlew clean assemble
+#./gradlew clean assemble
 
 service_name="micropifs"
 
@@ -64,8 +64,8 @@ for i in ${ipaddresses[@]}; do
     if [ "$platform" == "windows" ]; then 
         deployWin $host $username
     else 
-        #deployBash $host $username
-        removeBash $host $username
+        deployBash $host $username
+        #removeBash $host $username
     fi
 
     printf "===== End deploy: $platform / $username / $host =====\n"
