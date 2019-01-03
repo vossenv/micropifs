@@ -2,7 +2,6 @@ package com.dm.micropifs.logging;
 
 import com.dm.micropifs.MicroController;
 
-import java.io.IOException;
 import java.util.logging.*;
 
 public class FileLogger {

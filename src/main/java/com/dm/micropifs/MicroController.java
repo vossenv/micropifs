@@ -32,11 +32,11 @@ public class MicroController {
     public String status() {
 
 
-        logger.setLevel(Level.INFO);
-        logger.severe("Info Log");
-        logger.warning("Info Log");
-        logger.info("Info Log");
-        logger.finest("Really not important");
+//        logger.setLevel(Level.INFO);
+//        logger.severe("Info Log");
+//        logger.warning("Info Log");
+//        logger.info("Info Log");
+//        logger.finest("Really not important");
 
 
         return "true";
