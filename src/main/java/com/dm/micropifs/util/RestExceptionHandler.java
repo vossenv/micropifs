@@ -31,10 +31,10 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
         return buildResponseEntity(e, request, HttpStatus.REQUEST_TIMEOUT);
     }
 
-    @ExceptionHandler(IOException.class)
-    protected ResponseEntity<Object> handleIOException2(IOException e) {
-        return buildResponseEntity2(e, HttpStatus.REQUEST_TIMEOUT);
-    }
+//    @ExceptionHandler(IOException.class)
+//    protected ResponseEntity<Object> handleIOException2(IOException e) {
+//        return buildResponseEntity2(e, HttpStatus.REQUEST_TIMEOUT);
+//    }
 
     private ResponseEntity<Object> buildResponseEntity(Exception e, HttpServletRequest request, HttpStatus status) {
 
