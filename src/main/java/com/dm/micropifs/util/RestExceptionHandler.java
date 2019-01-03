@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 
 
@@ -19,15 +21,21 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(SocketTimeoutException.class)
-    protected ResponseEntity<Object> handleSocketTimeoutException( SocketTimeoutException e ) {
-        return buildResponseEntity(e, "Socket timeout! ", HttpStatus.REQUEST_TIMEOUT);
+    protected ResponseEntity<Object> handleSocketTimeoutException( SocketTimeoutException e, HttpServletRequest request) {
+        return buildResponseEntity(e, request, HttpStatus.REQUEST_TIMEOUT);
     }
 
 
+    @ExceptionHandler(IOException.class)
+    protected ResponseEntity<Object> handleIOException(IOException e, HttpServletRequest request) {
+        return buildResponseEntity(e, request, HttpStatus.REQUEST_TIMEOUT);
+    }
 
-    private ResponseEntity<Object> buildResponseEntity(Exception e, String message, HttpStatus status) {
+
+    private ResponseEntity<Object> buildResponseEntity(Exception e, HttpServletRequest request, HttpStatus status) {
 
         System.out.println("CUSTOMERRR" + e.getMessage());
+        System.out.println(request.getHeaderNames());
         APIError apiError = new APIError(status);
         apiError.setMessage(e.getMessage());
         return new ResponseEntity<>(apiError, apiError.getStatus());
