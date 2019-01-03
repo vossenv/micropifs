@@ -21,8 +21,6 @@ public class DataStore {
     private int bufferSize;
     private final MicroConfiguration mc;
     private final String sep = File.separator;
-
-
     private Map <String, PiCamera> cameraMap = new HashMap<>();
 
     @Inject
