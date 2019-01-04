@@ -20,21 +20,21 @@ import java.net.SocketTimeoutException;
 public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
 
 
-    @ExceptionHandler(SocketTimeoutException.class)
-    protected ResponseEntity<Object> handleSocketTimeoutException( SocketTimeoutException e) {
-
-        System.out.println(e.getMessage() + " SOCKET XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.REQUEST_TIMEOUT);
-    }
-
-
-    @ExceptionHandler(IOException.class)
-    protected ResponseEntity<Object> handleIOException(IOException e) {
-
-        System.out.println(e.getMessage() + " IO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.REQUEST_TIMEOUT);
-    }
+//    @ExceptionHandler(SocketTimeoutException.class)
+//    protected ResponseEntity<Object> handleSocketTimeoutException(SocketTimeoutException e) {
+//
+//        System.out.println(e.getMessage() + " SOCKET XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.REQUEST_TIMEOUT);
+//    }
+//
+//
+//    @ExceptionHandler(IOException.class)
+//    protected ResponseEntity<Object> handleIOException(IOException e) {
+//
+//        System.out.println(e.getMessage() + " IO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.REQUEST_TIMEOUT);
+//    }
 
 //    @ExceptionHandler(IOException.class)
 //    protected ResponseEntity<Object> handleIOException2(IOException e) {
