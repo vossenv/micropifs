@@ -1,7 +1,11 @@
 package com.dm.micropifs.model;
 
 import com.dm.micropifs.util.Deque;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class PiCamera {
@@ -10,12 +14,8 @@ public class PiCamera {
     private int bufferSize;
     private String camID;
     private int total = 0;
-
-    public PiCamera(int bufferSize, String camID) {
-        this.bufferSize = bufferSize;
-        this.camID = camID;
-        this.store = new Deque<>(bufferSize);
-    }
+    private long lastTime = System.currentTimeMillis();
+    private final static Logger audit = LogManager.getLogger("DataStore.Audit");
 
     public PiCamera(int bufferSize, String camID, PiImage init) {
         this.bufferSize = bufferSize;
@@ -26,28 +26,28 @@ public class PiCamera {
 
     public int addImage(PiImage image){
         this.store.add(image);
-        this.total += 1;
+        count();
         return this.total;
+    }
+
+    private void count(){
+        double rateInterval = 1000.0;
+        this.total += 1;
+        if ((this.total % rateInterval) == 0){
+            long currentime = System.currentTimeMillis();
+            double elapsed = currentime - this.lastTime;
+
+            BigDecimal rate = new BigDecimal(String.valueOf(rateInterval))
+                    .divide(new BigDecimal(String.valueOf(elapsed*0.001)),10,RoundingMode.HALF_UP)
+                    .setScale(2,RoundingMode.HALF_UP);
+
+            this.lastTime = currentime;
+            audit.debug(this.camID + ": Frame rate: " + rate.toString() + " /s");
+        }
     }
 
     public PiImage getNext() {
         return this.store.get(0);
-    }
-
-    public List<PiImage> getStore() {
-        return store;
-    }
-
-    public int getBufferSize() {
-        return bufferSize;
-    }
-
-    public String getCamID() {
-        return camID;
-    }
-
-    public int getTotal() {
-        return total;
     }
 
     @Override
