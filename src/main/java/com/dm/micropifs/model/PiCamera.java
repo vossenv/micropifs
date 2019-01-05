@@ -42,7 +42,7 @@ public class PiCamera {
                     .setScale(2,RoundingMode.HALF_UP);
 
             this.lastTime = currentime;
-            audit.debug(this.camID + ": Frame rate: " + rate.toString() + " /s");
+            audit.trace(this.camID + ": Frame rate: " + rate.toString() + " /s");
         }
     }
 
