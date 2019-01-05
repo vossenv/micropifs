@@ -10,11 +10,12 @@ import java.math.RoundingMode;
 @Component
 public class ExtendedLogger {
 
+
     private String getFileString(MultipartFile file) {
 
         try {
 
-            String fileSize = new BigDecimal(file.getSize()).movePointLeft(6).setScale(3, RoundingMode.HALF_UP).toString() + " MB";
+            String fileSize = getFileSize(file).toString() + " MB";
             String fileName = file.getOriginalFilename();
 
             return "{ filename: " + fileName + ", size: " + fileSize + " }";
@@ -22,7 +23,10 @@ public class ExtendedLogger {
         } catch (Exception e) {
             return  "Failed to retrieve details...";
         }
+    }
 
+    public BigDecimal getFileSize(MultipartFile file){
+        return  new BigDecimal(file.getSize()).movePointLeft(6).setScale(3, RoundingMode.HALF_UP);
     }
 
     final public String getRequestString(HttpServletRequest request) {

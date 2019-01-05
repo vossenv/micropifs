@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class DataStore {
     private final String sep = File.separator;
     private Map <String, PiCamera> cameraMap = new HashMap<>();
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
+    private BigDecimal totalData = new BigDecimal(0);
 
     @Inject
     public DataStore(ExtendedLogger el, MicroConfiguration microConfiguration) {
@@ -63,7 +66,8 @@ public class DataStore {
         new File(path).mkdirs();
         String fullpath = path + sep + file.getOriginalFilename();
 
-        audit.info(el.getRequestProcess("Video upload to " + prepend, file, request));
+        this.totalData = this.totalData.add(el.getFileSize(file));
+        audit.info(el.getRequestProcess("Video upload to " + prepend, file, request) + " ---> total data = " + this.totalData.setScale(3, RoundingMode.HALF_UP).toString() + " MB");
 
         file.transferTo(new File(fullpath));
         return "File succesfully stored: " + fullpath;
