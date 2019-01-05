@@ -77,7 +77,7 @@ public class DataStore {
                 .replace("'", "");
 
         pathOut = String.join(File.separator, splitPath(pathOut));
-        audit.debug("Correcting path: " + path + " to " + pathOut);
+        audit.trace("Correcting path: " + path + " to " + pathOut);
         return pathOut;
     }
 

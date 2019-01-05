@@ -14,7 +14,7 @@ public class ExtendedLogger {
 
         try {
 
-            String fileSize = new BigDecimal(file.getSize()).movePointLeft(3).setScale(2, RoundingMode.HALF_UP).toString() + " kB";
+            String fileSize = new BigDecimal(file.getSize()).movePointLeft(6).setScale(3, RoundingMode.HALF_UP).toString() + " MB";
             String fileName = file.getOriginalFilename();
 
             return "{ filename: " + fileName + ", size: " + fileSize + " }";
