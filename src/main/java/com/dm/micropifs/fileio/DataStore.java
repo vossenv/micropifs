@@ -3,6 +3,9 @@ package com.dm.micropifs.fileio;
 import com.dm.micropifs.MicroConfiguration;
 import com.dm.micropifs.model.PiCamera;
 import com.dm.micropifs.model.PiImage;
+import com.dm.micropifs.util.ExtendedLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +22,15 @@ import java.util.regex.Pattern;
 public class DataStore {
 
     private int bufferSize;
+    private final ExtendedLogger el;
     private final MicroConfiguration mc;
     private final String sep = File.separator;
     private Map <String, PiCamera> cameraMap = new HashMap<>();
+    private final static Logger audit = LogManager.getLogger("DataStore.Audit");
 
     @Inject
-    public DataStore(MicroConfiguration microConfiguration) {
+    public DataStore(ExtendedLogger el, MicroConfiguration microConfiguration) {
+        this.el = el;
         this.mc = microConfiguration;
         this.bufferSize = mc.getCamBufferSize();
     }
@@ -32,8 +38,12 @@ public class DataStore {
     public Object updateCam(HttpServletRequest request, MultipartFile file, String camID) throws Exception {
 
         if (cameraMap.containsKey(camID)){
+
+            audit.trace(el.getRequestProcess("Updating '" + camID + "'", file, request));
             return cameraMap.get(camID).addImage(new PiImage(request,file));
         } else {
+
+            audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request ) + " Map size: " + String.valueOf(cameraMap.size() + 1));
             cameraMap.put(camID, new PiCamera(bufferSize,camID, new PiImage(request,file)));
             return 1;
         }
@@ -52,18 +62,23 @@ public class DataStore {
 
         new File(path).mkdirs();
         String fullpath = path + sep + file.getOriginalFilename();
+
+        audit.info(el.getRequestProcess("Video upload to " + prepend, file, request));
+
         file.transferTo(new File(fullpath));
         return "File succesfully stored: " + fullpath;
     }
 
     public static String fixPath(String path) {
-        path = path
+        String pathOut = path
                 .replace("\\", File.separator)
                 .replace("/", File.separator)
                 .replace("\"", "")
                 .replace("'", "");
 
-        return String.join(File.separator, splitPath(path));
+        pathOut = String.join(File.separator, splitPath(pathOut));
+        audit.debug("Correcting path: " + path + " to " + pathOut);
+        return pathOut;
     }
 
     private static List<String> splitPath(String path) {

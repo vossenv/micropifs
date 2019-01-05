@@ -22,9 +22,18 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging'
+    compile.exclude module: "logback-classic"
+}
 
 dependencies {
+    compile 'org.apache.logging.log4j:log4j-api:2.+'
+    compile 'org.apache.logging.log4j:log4j-core:2.+'
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile ('javax.inject:javax.inject:1')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile ('org.springframework.boot:spring-boot-starter-log4j2:2.1.1.RELEASE')
+    compile ('com.lmax:disruptor:3.4.2')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
 }
