@@ -65,7 +65,7 @@ function deployWin() {
     printf "\nBegin file transfer... \n"
     scp build/libs/micropifs.jar $2@$1:"C:/Program\\ Files\\ (x86)/Micropifs/micropifs.jar"
     printf "\nStarting service.... \n"
-    timeout 5 ssh $2@$1 Start-Service -Name Micropifs
+    timeout 5 ssh $2@$1 Start-Service -Name micropifs
     check_remote $1
 }
 
@@ -75,6 +75,8 @@ for i in ${ipaddresses[@]}; do
     host=${tokens[0]}
     platform=${tokens[1]}
     username=${tokens[2]}
+	
+	ssh-keygen -R $host
     
     printf "\n===== Begin deploy: $platform / $username / $host =====\n\n"
     if [ "$platform" == "windows" ]; then 
