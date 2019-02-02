@@ -63,7 +63,7 @@ function deployWin() {
     printf "Stopping service.... \n"
     timeout 5 ssh $2@$1 Stop-Service -Name Micropifs
     printf "\nBegin file transfer... \n"
-    scp build/libs/micropifs.jar $2@$1:"C:/Program\\ Files\\ (x86)/Micropifs/micropifs.jar"
+    scp build/libs/micropifs.jar $2@$1:"C:/Program\\ Files/Micropifs/micropifs.jar"
     printf "\nStarting service.... \n"
     timeout 5 ssh $2@$1 Start-Service -Name micropifs
     check_remote $1
