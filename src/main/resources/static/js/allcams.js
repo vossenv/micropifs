@@ -30,5 +30,5 @@ function updateSingleCamera(camId) {
     $("#"+camId).attr('src', "/cameras/" + camId + "/next?" + Date.now());
     setTimeout(function(){
         updateSingleCamera(camId)
-    }, 500);
+    }, 250);
 }
