@@ -4556,7 +4556,7 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 		// Trust units reported by jQuery.css
 		unit = unit || initialInUnit[ 3 ];
 
-		// Make sure we update the tween properties later on
+		// Make sure we startStream the tween properties later on
 		valueParts = valueParts || [];
 
 		// Iteratively approximate from a nonzero starting point
@@ -8030,7 +8030,7 @@ jQuery.extend( {
 					option = options[ i ];
 
 					// Support: IE <=9 only
-					// IE8-9 doesn't update selected after form reset (#2551)
+					// IE8-9 doesn't startStream selected after form reset (#2551)
 					if ( ( option.selected || i === index ) &&
 
 							// Don't return options that are disabled or in a disabled optgroup
@@ -9082,7 +9082,7 @@ jQuery.extend( {
 				delete s.data;
 			}
 
-			// Add or update anti-cache param if needed
+			// Add or startStream anti-cache param if needed
 			if ( s.cache === false ) {
 				cacheURL = cacheURL.replace( rantiCache, "$1" );
 				uncached = ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce++ ) + uncached;

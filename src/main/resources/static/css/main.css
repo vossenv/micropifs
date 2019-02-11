@@ -1,0 +1,101 @@
+
+#banner {
+    margin-top: -10px;
+    margin-bottom: -5px;
+    text-align: left;
+}
+.camImg {
+    border: 1px solid #31b0d5;
+    border-radius:5px;
+    height: 400px;
+    width: 500px;
+    margin: 5px;
+    display:inline-block;
+    background-size:cover;
+    position:relative;
+    margin-bottom:0;
+    box-shadow: 0 0 5px #31708f;
+    -webkit-filter: drop-shadow(0px 0px 5px #31708f);
+    filter:drop-shadow(0px 0px 5px #31708f);
+}
+
+
+.camImg:hover{
+    -webkit-filter: drop-shadow(0px 0px 1px #5bc0de);
+    filter:drop-shadow(0px 0px 1px #5bc0de);
+}
+
+#banner-pic img{
+    -webkit-filter: drop-shadow(0px 0px 7px #5bc0de);
+    filter:drop-shadow(0px 0px 7px #5bc0de);
+}
+
+#page{
+    max-width:1800px;
+    min-width:450px;
+}
+
+body {
+    background: #292b2c url('../images/29787.jpg') fixed no-repeat;
+    background-size: cover;
+}
+
+.banner-div, .ptext, h1 {
+    color:whitesmoke !important;
+}
+
+.ptext{
+    font-style: italic;
+}
+
+hr {
+    background-color:#5bc0de;
+}
+
+.banner-div {
+    display:inline-block;
+    text-align:left;
+    margin: 0px;
+    vertical-align:top;
+}
+
+.data {
+    color: green;
+}
+
+#banner-title, #banner-other{
+    display: inline-block;
+}
+
+#banner-title{
+    width: 70%;
+}
+
+#banner-other{
+    width: 28%;
+}
+
+#banner-other{
+    text-align: right;
+}
+#banner-form{
+    width: 100%;
+    text-align: center;
+}
+
+@media all and (max-width: 1000px){
+
+    #banner-title, #banner-other{
+        width:100%;
+        margin-bottom: 5px;
+        text-align: left ;
+    }
+
+    #banner-other{
+        display: none;
+        text-align: center !important;
+    }
+
+}
+
+

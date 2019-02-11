@@ -2,19 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Carag Camera Feed</title>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
 </head>
 <body>
+<div id="page" class="container text-center">
 
+<div class="row text-center">
+    <div class="col-sm-12 text-center">
+        <hr/>
 
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <div id="date" class="data"></div>
+                <h1>Views of Carag</h1>
+                <div class="ptext"> "Where the sun it never sets, my lads,
+                    nor darkness dims the sky."  </div>
+            </div>
 
-<div id="pic">
-<img id="img" src=""/>
+            <div class="col-md-6 text-right">
+                <div class="banner-div" id="banner-data"></div>
+                <div class="banner-div" id="banner-pic"></div>
+
+            </div>
+        </div>
+
+        <hr/>
+        <br/><br/>
+
+        <div class="text-center" id="camDiv"></div>
+
+        <br/><br/>
+        <hr/>
+    </div>
 </div>
-<div id="info"></div>
+</div>
 
-<script src="/static/js/jquery-3.2.1.js"></script>
-<script src="/static/js/main.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="/static/js/moment.js"></script>
+<script src="/static/js/allcams.js"></script>
+<script src="/static/js/weather.js"></script>
 
 
 </body>

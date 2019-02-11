@@ -42,6 +42,12 @@ public class MicroController {
     }
 
     @ResponseBody
+    @RequestMapping(value = {"/camlist"}, method = RequestMethod.GET)
+    public Object getCamList(){
+        return ds.getCameraList();
+    }
+
+    @ResponseBody
     @RequestMapping(value = {"/store"}, method = RequestMethod.POST)
     public Object storeFile(@RequestParam MultipartFile file, HttpServletRequest request) {
         try {
