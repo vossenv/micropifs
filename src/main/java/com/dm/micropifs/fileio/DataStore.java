@@ -35,24 +35,19 @@ public class DataStore {
         this.bufferSize = mc.getCamBufferSize();
     }
 
-    public Object updateCam(PiImage image, String camID){
+    public void updateCam(PiImage image, String camID){
         if (cameraMap.containsKey(camID)){
             audit.trace("Updating "  + camID + "from internal API" );
-            return cameraMap.get(camID).addImage(image);
         } else {
             audit.info("New device discovered! Creating entry from internal API for " + camID + " Map size: " + String.valueOf(cameraMap.size() + 1));
             cameraMap.put(camID, new PiCamera(bufferSize,camID, image));
-            return 1;
         }
     }
     public Object updateCam(HttpServletRequest request, MultipartFile file, String camID) throws Exception {
-
         if (cameraMap.containsKey(camID)){
-
             audit.trace(el.getRequestProcess("Updating '" + camID + "'", file, request));
             return cameraMap.get(camID).addImage(new PiImage(request,file));
         } else {
-
             audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request ) + " Map size: " + String.valueOf(cameraMap.size() + 1));
             cameraMap.put(camID, new PiCamera(bufferSize,camID, new PiImage(request,file)));
             return 1;
