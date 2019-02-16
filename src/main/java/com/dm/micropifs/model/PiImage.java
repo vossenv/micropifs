@@ -13,6 +13,10 @@ public class PiImage {
     private HttpHeaders headers = new HttpHeaders();
     private byte[] image;
 
+    public PiImage(byte [] image, HttpHeaders headers){
+        this.image = image;
+        this.headers = headers;
+    }
 
     public PiImage(HttpServletRequest request, MultipartFile file) throws IOException {
 
@@ -35,5 +39,13 @@ public class PiImage {
 
     public byte[] getImage() {
         return image;
+    }
+
+    public void setHeaders(HttpHeaders headers) {
+        this.headers = headers;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
