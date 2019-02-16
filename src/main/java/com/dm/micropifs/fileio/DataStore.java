@@ -24,7 +24,7 @@ public class DataStore {
     private final ExtendedLogger el;
     private final MicroConfiguration mc;
     private final String sep = File.separator;
-    private Map <String, PiCamera> cameraMap = new HashMap<>();
+    private Map <String, PiCamera> cameraMap = new LinkedHashMap<>();
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
     private BigDecimal totalData = new BigDecimal(0);
 
