@@ -3,7 +3,6 @@ package com.dm.micropifs;
 import com.dm.micropifs.fileio.DataStore;
 import com.dm.micropifs.model.PiImage;
 import com.dm.micropifs.util.ExtendedLogger;
-import com.dm.micropifs.websource.AlarmConnector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class MicroController {
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
 
     @Inject
-    public MicroController(ExtendedLogger el, DataStore ds, AlarmConnector ac) {
+    public MicroController(ExtendedLogger el, DataStore ds) {
         this.el = el;
         this.ds = ds;
     }
