@@ -1,11 +1,19 @@
 
+:root {
+
+    --background: url('../images/CUBE.jpg');
+    --primary_color: #15ff00;
+    --accent_color: #155724;
+
+}
+
 #banner {
     margin-top: -10px;
     margin-bottom: -5px;
     text-align: left;
 }
 .camImg {
-    border: 1px solid #31b0d5;
+    border: 1px solid var(--primary_color);
     border-radius:5px;
     height: 400px;
     width: 500px;
@@ -14,20 +22,20 @@
     background-size:cover;
     position:relative;
     margin-bottom:0;
-    box-shadow: 0 0 5px #31708f;
-    -webkit-filter: drop-shadow(0px 0px 5px #31708f);
-    filter:drop-shadow(0px 0px 5px #31708f);
+    box-shadow: 0 0 15px var(--accent_color);
+    -webkit-filter: drop-shadow(0px 0px 15px var(--accent_color));
+    filter:drop-shadow(0px 0px 15px var(--accent_color));
 }
 
 
 .camImg:hover{
-    -webkit-filter: drop-shadow(0px 0px 1px #5bc0de);
-    filter:drop-shadow(0px 0px 1px #5bc0de);
+    -webkit-filter: drop-shadow(0px 0px 1px var(--primary_color));
+    filter:drop-shadow(0px 0px 1px var(--primary_color));
 }
 
 #banner-pic img{
-    -webkit-filter: drop-shadow(0px 0px 7px #5bc0de);
-    filter:drop-shadow(0px 0px 7px #5bc0de);
+    -webkit-filter: drop-shadow(0px 0px 7px var(--primary_color));
+    filter:drop-shadow(0px 0px 7px var(--primary_color));
 }
 
 #page{
@@ -36,21 +44,23 @@
 }
 
 body {
-    background: #292b2c url('../images/29787.jpg') fixed no-repeat;
+    background: #292b2c var(--background) fixed no-repeat;
     background-size: cover;
 }
 
 .banner-div, .ptext, h1 {
+
     color:whitesmoke !important;
 }
 
 .ptext{
     font-style: italic;
-}
 
-hr {
-    background-color:#5bc0de;
 }
+/*
+hr {
+    background-color:var(--primary_color);
+} */
 
 .banner-div {
     display:inline-block;
@@ -60,7 +70,7 @@ hr {
 }
 
 .data {
-    color: green;
+    color: #cacaca;
 }
 
 #banner-title, #banner-other{
