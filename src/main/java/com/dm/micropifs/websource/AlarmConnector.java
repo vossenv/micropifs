@@ -4,6 +4,8 @@ import com.dm.micropifs.MicrocamPifs;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
+@Scope("prototype")
 public class AlarmConnector {
 
     @Inject
@@ -55,6 +58,7 @@ public class AlarmConnector {
                 logger.error("Authentication failed, reason: "+ e.getMessage());
             }
         }
+
 
         String url = baseURL + target;
         HttpEntity<String> request = new HttpEntity<>(this.authHeaders);

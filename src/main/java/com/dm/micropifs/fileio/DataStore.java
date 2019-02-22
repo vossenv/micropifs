@@ -38,6 +38,7 @@ public class DataStore {
     public void updateCam(PiImage image, String camID){
         if (cameraMap.containsKey(camID)){
             audit.trace("Updating "  + camID + "from internal API" );
+            cameraMap.get(camID).addImage(image);
         } else {
             audit.info("New device discovered! Creating entry from internal API for " + camID + " Map size: " + String.valueOf(cameraMap.size() + 1));
             cameraMap.put(camID, new PiCamera(bufferSize,camID, image));

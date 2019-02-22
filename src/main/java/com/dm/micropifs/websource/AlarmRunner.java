@@ -1,11 +1,10 @@
 package com.dm.micropifs.websource;
 
-import com.dm.micropifs.MicrocamPifs;
 import com.dm.micropifs.fileio.DataStore;
 import com.dm.micropifs.model.PiImage;
-import com.dm.micropifs.util.ExtendedLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +16,12 @@ import java.util.List;
 @Component
 public class AlarmRunner {
 
-    @Inject private AlarmConnector ac;
     @Inject private DataStore ds;
 
-    private int sleeptime = 500;
+    @Inject
+    private ApplicationContext context;
+
+    private int sleeptime = 250;
     private List<String> lloydCams = Arrays.asList("2048","2049");
 
     @PostConstruct
@@ -32,6 +33,8 @@ public class AlarmRunner {
 
         lloydCams.forEach(c -> {
             new Thread(() -> {
+
+                AlarmConnector ac = context.getBean(AlarmConnector.class);
                 Logger logger = LogManager.getLogger(AlarmRunner.class + " - " + c);
                 logger.info("Initializing thread for alarm api for id: " + c);
 
