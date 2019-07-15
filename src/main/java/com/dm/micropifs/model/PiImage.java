@@ -10,25 +10,29 @@ import java.util.HashMap;
 
 public class PiImage {
 
+    private String source;
     private HttpHeaders headers = new HttpHeaders();
     private byte[] image;
 
-    public PiImage(byte [] image, HttpHeaders headers){
+    public PiImage(byte[] image, HttpHeaders headers, String source) {
         this.image = image;
         this.headers = headers;
+        this.source = source;
     }
 
-    public PiImage(HttpServletRequest request, MultipartFile file) throws IOException {
+    public PiImage(HttpServletRequest request, MultipartFile file, String source) throws IOException {
 
         this.image = file.getBytes();
+        this.source = source;
 
         try {
             (new ObjectMapper()
                     .readValue(request.getHeader("Metadata").replaceAll("'", "\""), HashMap.class))
-                    .forEach((k,v) -> this.headers.add(k.toString(), v.toString()));
+                    .forEach((k, v) -> this.headers.add(k.toString(), v.toString()));
+            this.headers.add("Camera-Name", source);
 
-        } catch (Exception e){
-            this.headers.add("Metadata-Error","Error or no data present: " + e.getMessage());
+        } catch (Exception e) {
+            this.headers.add("Metadata-Error", "Error or no data present: " + e.getMessage());
         }
     }
 
@@ -48,4 +52,8 @@ public class PiImage {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public String getSource() {return source;}
+
+    public void setSource(String source) {this.source = source;}
 }

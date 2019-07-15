@@ -14,6 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class MicroController {
@@ -70,6 +74,31 @@ public class MicroController {
         }
     }
 
+    @RequestMapping(value = "/cameras/next", method = RequestMethod.GET)
+    public ResponseEntity<Object> getNextCameraImages(HttpServletRequest request) {
+        try {
+
+            Set<String> cameraList;
+            String requestedCams = request.getHeader("Camera-List");
+
+            if (null != requestedCams && (!requestedCams.isEmpty())) {
+                cameraList = Arrays.stream(requestedCams.split(",")).map(String::trim).collect(Collectors.toSet());
+            } else {
+                cameraList = ds.getCameraList();
+            }
+
+            List<PiImage> results = cameraList.stream().map(ds::getNext).collect(Collectors.toList());
+
+            return ResponseEntity
+                    .ok()
+                    .header("Image-Count", String.valueOf(cameraList.size()))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(results);
+        } catch (Exception e) {
+            return generateExceptionResponse(request, e);
+        }
+    }
+
     @RequestMapping(value = "/cameras/{camID}/next", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Object> getNextCameraImage(@PathVariable("camID") String camID, HttpServletRequest request) {
         try {
@@ -80,16 +109,21 @@ public class MicroController {
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(next.getImage());
         } catch (Exception e) {
-            logger.error(el.getRequestError(request, e));
-            String type = e.getClass().getCanonicalName();
-            String msg = type + ": " + (type.contains("NullPointer")
-                    ? "No content stored for camera named '"+ camID + "'..."
-                    : e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .contentType(MediaType.TEXT_PLAIN)
-                    .body(msg);
+            return generateExceptionResponse(request, e);
         }
+    }
+
+    private ResponseEntity generateExceptionResponse(HttpServletRequest request, Exception e){
+        logger.error(el.getRequestError(request, e));
+        String type = e.getClass().getCanonicalName();
+        String msg = type + ": " + (type.contains("NullPointer")
+                ? "No content stored for requested source... "
+                : e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(msg);
+
     }
 }
 

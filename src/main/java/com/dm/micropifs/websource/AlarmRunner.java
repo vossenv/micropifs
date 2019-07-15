@@ -40,7 +40,7 @@ public class AlarmRunner {
 
                 while (true) {
                     try {
-                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders()), c);
+                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders(), c), c);
                         Thread.sleep(this.sleeptime);
                     }
                     catch (Exception e){
