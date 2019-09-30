@@ -47,5 +47,10 @@
             <AppenderRef ref="rollingAudit" />
             <AppenderRef ref="Console" />
         </Logger>
+        <Logger name="CamMonitor.Audit" level="debug" additivity="false">
+            <AppenderRef ref="rollingLog" />
+            <AppenderRef ref="rollingAudit" />
+            <AppenderRef ref="Console" />
+        </Logger>
     </Loggers>
 </Configuration>

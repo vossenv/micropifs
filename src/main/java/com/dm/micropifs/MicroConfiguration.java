@@ -1,7 +1,7 @@
 package com.dm.micropifs;
 
 
-import com.dm.micropifs.fileio.DataStore;
+import com.dm.micropifs.data.DataStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +23,12 @@ public class MicroConfiguration implements WebMvcConfigurer {
 
     @Value("${camera.buffer.size}")
     private int camBufferSize;
+
+    @Value("${camera.timeout.seconds}")
+    private int cameTimeout;
+
+    @Value("${camera.check.seconds}")
+    private int monitorCheckRate;
 
     @PostConstruct
     void setStoragePath() {
@@ -48,5 +54,9 @@ public class MicroConfiguration implements WebMvcConfigurer {
     public int getCamBufferSize() {
         return camBufferSize;
     }
+
+    public int getCameTimeout() {return cameTimeout;}
+
+    public int getMonitorCheckRate() {return monitorCheckRate;}
 }
 

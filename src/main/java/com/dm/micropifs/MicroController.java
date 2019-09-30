@@ -1,6 +1,6 @@
 package com.dm.micropifs;
 
-import com.dm.micropifs.fileio.DataStore;
+import com.dm.micropifs.data.DataStore;
 import com.dm.micropifs.model.PiImage;
 import com.dm.micropifs.util.ExtendedLogger;
 import org.apache.logging.log4j.LogManager;

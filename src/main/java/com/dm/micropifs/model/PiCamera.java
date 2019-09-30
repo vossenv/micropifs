@@ -1,12 +1,9 @@
 package com.dm.micropifs.model;
 
 import com.dm.micropifs.util.Deque;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 
 public class PiCamera {
 
@@ -15,7 +12,7 @@ public class PiCamera {
     private String camID;
     private int total = 0;
     private long lastTime = System.currentTimeMillis();
-    private final static Logger audit = LogManager.getLogger("DataStore.Audit");
+
 
     public PiCamera(int bufferSize, String camID, PiImage init) {
         this.bufferSize = bufferSize;
@@ -24,31 +21,20 @@ public class PiCamera {
         this.store.add(init);
     }
 
-    public int addImage(PiImage image){
-        this.store.add(image);
-        count();
-        return this.total;
+    public int addImage(PiImage image) {
+        store.add(image);
+        total += 1;
+        lastTime = System.currentTimeMillis();
+        return total;
     }
 
-    private void count(){
-        double rateInterval = 1000.0;
-        this.total += 1;
-        if ((this.total % rateInterval) == 0){
-            long currentime = System.currentTimeMillis();
-            double elapsed = currentime - this.lastTime;
-
-            BigDecimal rate = new BigDecimal(String.valueOf(rateInterval))
-                    .divide(new BigDecimal(String.valueOf(elapsed*0.001)),10,RoundingMode.HALF_UP)
-                    .setScale(2,RoundingMode.HALF_UP);
-
-            this.lastTime = currentime;
-            audit.trace(this.camID + ": Frame rate: " + rate.toString() + " /s");
-        }
-    }
+    public long getLastTime() {return lastTime;}
 
     public PiImage getNext() {
-        return this.store.get(0);
+        return store.get(0);
     }
+
+    public String getCamID() {return camID;}
 
     @Override
     public boolean equals(Object o) {
@@ -58,8 +44,10 @@ public class PiCamera {
         PiCamera piCamera = (PiCamera) o;
 
         if (bufferSize != piCamera.bufferSize) return false;
-        if (store != null ? !store.equals(piCamera.store) : piCamera.store != null) return false;
-        return camID != null ? camID.equals(piCamera.camID) : piCamera.camID == null;
+        if (total != piCamera.total) return false;
+        if (lastTime != piCamera.lastTime) return false;
+        if (!Objects.equals(store, piCamera.store)) return false;
+        return Objects.equals(camID, piCamera.camID);
     }
 
     @Override
@@ -67,6 +55,8 @@ public class PiCamera {
         int result = store != null ? store.hashCode() : 0;
         result = 31 * result + bufferSize;
         result = 31 * result + (camID != null ? camID.hashCode() : 0);
+        result = 31 * result + total;
+        result = 31 * result + (int) (lastTime ^ (lastTime >>> 32));
         return result;
     }
 }

@@ -1,4 +1,4 @@
-package com.dm.micropifs.fileio;
+package com.dm.micropifs.data;
 
 import com.dm.micropifs.MicroConfiguration;
 import com.dm.micropifs.model.PiCamera;
@@ -15,6 +15,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 @Service
@@ -24,33 +25,39 @@ public class DataStore {
     private final ExtendedLogger el;
     private final MicroConfiguration mc;
     private final String sep = File.separator;
-    private Map <String, PiCamera> cameraMap = new LinkedHashMap<>();
+    private Map<String, PiCamera> cameraMap = new ConcurrentHashMap<>();
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
     private BigDecimal totalData = new BigDecimal(0);
+    private CameraMonitor cm;
+
 
     @Inject
     public DataStore(ExtendedLogger el, MicroConfiguration microConfiguration) {
         this.el = el;
         this.mc = microConfiguration;
         this.bufferSize = mc.getCamBufferSize();
+        this.cm = new CameraMonitor(cameraMap, mc.getCameTimeout(), mc.getMonitorCheckRate());
+        Thread th = new Thread(this.cm);
+        th.start();
     }
 
-    public void updateCam(PiImage image, String camID){
-        if (cameraMap.containsKey(camID)){
-            audit.trace("Updating "  + camID + "from internal API" );
+    public void updateCam(PiImage image, String camID) {
+        if (cameraMap.containsKey(camID)) {
+            audit.trace("Updating " + camID + "from internal API");
             cameraMap.get(camID).addImage(image);
         } else {
             audit.info("New device discovered! Creating entry from internal API for " + camID + " Map size: " + String.valueOf(cameraMap.size() + 1));
-            cameraMap.put(camID, new PiCamera(bufferSize,camID, image));
+            cameraMap.put(camID, new PiCamera(bufferSize, camID, image));
         }
     }
+
     public Object updateCam(HttpServletRequest request, MultipartFile file, String camID) throws Exception {
-        if (cameraMap.containsKey(camID)){
+        if (cameraMap.containsKey(camID)) {
             audit.trace(el.getRequestProcess("Updating '" + camID + "'", file, request));
-            return cameraMap.get(camID).addImage(new PiImage(request,file, camID));
+            return cameraMap.get(camID).addImage(new PiImage(request, file, camID));
         } else {
-            audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request ) + " Map size: " + String.valueOf(cameraMap.size() + 1));
-            cameraMap.put(camID, new PiCamera(bufferSize,camID, new PiImage(request,file, camID)));
+            audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request) + " Map size: " + String.valueOf(cameraMap.size() + 1));
+            cameraMap.put(camID, new PiCamera(bufferSize, camID, new PiImage(request, file, camID)));
             return 1;
         }
     }
@@ -59,7 +66,7 @@ public class DataStore {
         return cameraMap.get(camID).getNext();
     }
 
-    public Set<String> getCameraList(){
+    public Set<String> getCameraList() {
         return this.cameraMap.keySet();
     }
 
@@ -100,3 +107,5 @@ public class DataStore {
     }
 
 }
+
+
