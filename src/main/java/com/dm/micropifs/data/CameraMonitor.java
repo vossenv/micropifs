@@ -18,8 +18,6 @@ public class CameraMonitor implements Runnable {
         this.cameraMap = cameraMap;
         this.camTimeout = camTimeout * 1000;
         this.monitorCheckRate = monitorCheckRate * 1000;
-
-        audit.info("TEST");
     }
 
     @Override
