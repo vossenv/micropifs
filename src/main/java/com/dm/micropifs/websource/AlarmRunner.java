@@ -25,8 +25,8 @@ public class AlarmRunner {
 
     private int sleeptime = 250;
     private Map<String, String> lloydCams =  Stream.of(new String[][]{
-                    {"2048", "Living Room"},
-                    {"2049", "Garage"},
+                    {"2048", "living_room"},
+                    {"2049", "garage"},
             }).collect(Collectors.toMap(d -> d[0], d -> d[1]));
 
     @PostConstruct
