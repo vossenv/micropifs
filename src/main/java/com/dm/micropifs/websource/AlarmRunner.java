@@ -45,7 +45,7 @@ public class AlarmRunner {
 
                 while (true) {
                     try {
-                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders(), c), n);
+                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders(), n), n);
                         Thread.sleep(this.sleeptime);
                     } catch (Exception e) {
                         logger.error("Failed to get new alarm.com image: " + e.getMessage());
