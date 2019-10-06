@@ -10,28 +10,33 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class AlarmRunner {
 
-    @Inject private DataStore ds;
+    @Inject
+    private DataStore ds;
 
     @Inject
     private ApplicationContext context;
 
     private int sleeptime = 250;
-    private List<String> lloydCams = Arrays.asList("2048","2049");
+    private Map<String, String> lloydCams =  Stream.of(new String[][]{
+                    {"2048", "Living Room"},
+                    {"2049", "Garage"},
+            }).collect(Collectors.toMap(d -> d[0], d -> d[1]));
 
     @PostConstruct
-    void startRun(){
+    void startRun() {
         startCam();
     }
 
-    private void startCam(){
+    private void startCam() {
 
-        lloydCams.forEach(c -> {
+        lloydCams.forEach((c, n) -> {
             new Thread(() -> {
 
                 AlarmConnector ac = context.getBean(AlarmConnector.class);
@@ -40,13 +45,13 @@ public class AlarmRunner {
 
                 while (true) {
                     try {
-                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders(), c), c);
+                        ds.updateCam(new PiImage(ac.getImage(c), new HttpHeaders(), c), n);
                         Thread.sleep(this.sleeptime);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         logger.error("Failed to get new alarm.com image: " + e.getMessage());
                     }
-                }}).start();
+                }
+            }).start();
         });
     }
 
