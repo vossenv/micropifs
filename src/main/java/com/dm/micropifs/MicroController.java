@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,6 +37,13 @@ public class MicroController {
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
     public String status(HttpServletRequest request) {
         logger.info(el.getRequestString(request) + ": Status returned true");
+        return "version 1.0";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/check"}, method = RequestMethod.GET)
+    public String check(HttpServletRequest request) {
+        logger.info(el.getRequestString(request) + ": Status returned true");
         return "true";
     }
 
@@ -47,7 +54,7 @@ public class MicroController {
 
     @ResponseBody
     @RequestMapping(value = {"/camlist"}, method = RequestMethod.GET)
-    public Object getCamList(){
+    public Object getCamList() {
         return ds.getCameraList();
     }
 
@@ -75,19 +82,23 @@ public class MicroController {
     }
 
     @RequestMapping(value = "/cameras/next", method = RequestMethod.GET)
-    public ResponseEntity<Object> getNextCameraImages(HttpServletRequest request) {
+    public ResponseEntity<Object> getNextCameraImages(HttpServletRequest request, @RequestParam(required = false) List<String> cams) {
         try {
 
+            List<PiImage> results = new ArrayList<>();
             Set<String> cameraList;
-            String requestedCams = request.getHeader("Camera-List");
 
-            if (null != requestedCams && (!requestedCams.isEmpty())) {
-                cameraList = Arrays.stream(requestedCams.split(",")).map(String::trim).collect(Collectors.toSet());
+            if (null != cams && (!cams.isEmpty())) {
+                cameraList = cams.stream().map(String::trim).collect(Collectors.toSet());
             } else {
                 cameraList = ds.getCameraList();
             }
 
-            List<PiImage> results = cameraList.stream().map(ds::getNext).collect(Collectors.toList());
+            cameraList.forEach(c -> {
+                try {
+                    results.add(ds.getNext(c));
+                } catch (NullPointerException e) { /* Do noting - this image was not found*/}
+            });
 
             return ResponseEntity
                     .ok()
@@ -113,7 +124,7 @@ public class MicroController {
         }
     }
 
-    private ResponseEntity generateExceptionResponse(HttpServletRequest request, Exception e){
+    private ResponseEntity generateExceptionResponse(HttpServletRequest request, Exception e) {
         logger.error(el.getRequestError(request, e));
         String type = e.getClass().getCanonicalName();
         String msg = type + ": " + (type.contains("NullPointer")
