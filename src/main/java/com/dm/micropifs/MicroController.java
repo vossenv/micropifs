@@ -108,7 +108,9 @@ public class MicroController {
 
             cameraList.forEach(c -> {
                 try {
-                    results.add(ds.getNext(c));
+                    PiImage p = ds.getNext(c);
+                    p.setIp(mc.getCamIp(c));
+                    results.add(p);
                 } catch (NullPointerException e) { /* Do noting - this image was not found*/}
             });
 

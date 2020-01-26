@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class PiImage {
 
     private String source;
+    private String ip = "unknown";
     private HttpHeaders headers = new HttpHeaders();
     private byte[] image;
 
@@ -36,24 +37,20 @@ public class PiImage {
         }
     }
 
-
     public HttpHeaders getHeaders() {
         return headers;
     }
-
     public byte[] getImage() {
         return image;
     }
-
     public void setHeaders(HttpHeaders headers) {
         this.headers = headers;
     }
-
     public void setImage(byte[] image) {
         this.image = image;
     }
-
     public String getSource() {return source;}
-
     public void setSource(String source) {this.source = source;}
+    public String getIp() {return ip;}
+    public void setIp(String ip) {this.ip = ip;}
 }

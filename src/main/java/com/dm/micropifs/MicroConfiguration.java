@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Configuration
@@ -57,6 +56,7 @@ public class MicroConfiguration implements WebMvcConfigurer {
     }
 
     public int getCamBufferSize() {
+
         return camBufferSize;
     }
 
@@ -73,16 +73,21 @@ public class MicroConfiguration implements WebMvcConfigurer {
     }
 
     public String getCamId(String camIp) {
-        String id = ipAddressMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey)).get(camIp);
-        if (null == id) id = "unknown";
-        return id;
+
+        for (String k : ipAddressMap.keySet()) {
+            if (ipAddressMap.get(k).equals(camIp)) {
+                return k;
+            }
+        }
+        return "unknown";
     }
 
     public String getCamIp(String camId) {
-        String ip = ipAddressMap.get(camId);
-        if (null == ip) ip = "unknown";
-        return ip;
+
+        if (ipAddressMap.containsKey(camId)) {
+            return ipAddressMap.get(camId);
+        }
+        return "unknown";
     }
 }
 

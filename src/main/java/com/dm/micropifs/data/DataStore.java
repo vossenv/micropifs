@@ -46,7 +46,6 @@ public class DataStore {
 
     public void updateCam(PiImage image, String camID) {
         if (cameraMap.containsKey(camID)) {
-            audit.trace("Updating " + camID + "from internal API");
             cameraMap.get(camID).addImage(image);
         } else {
             mc.getIpAddressMap().put(camID, "LLoyd Remote");
@@ -56,14 +55,12 @@ public class DataStore {
     }
 
     public Object updateCam(HttpServletRequest request, MultipartFile file, String camID) throws Exception {
+        mc.getIpAddressMap().put(camID, request.getRemoteAddr());
         if (cameraMap.containsKey(camID)) {
-            audit.trace(el.getRequestProcess("Updating '" + camID + "'", file, request));
             return cameraMap.get(camID).addImage(new PiImage(request, file, camID));
         } else {
-            String ip = request.getRemoteAddr();
-            mc.getIpAddressMap().put(camID, ip);
             audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request) + " Map size: " + (cameraMap.size() + 1));
-            cameraMap.put(camID, new PiCamera(bufferSize, camID, ip, new PiImage(request, file, camID)));
+            cameraMap.put(camID, new PiCamera(bufferSize, camID, new PiImage(request, file, camID)));
             return 1;
         }
     }
