@@ -9,7 +9,7 @@
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
         <RollingFile name="rollingLog"
-                     append="false"
+                     append="true"
                      fileName="${APP_LOG_ROOT}/micropifs.log"
                      filePattern="${APP_LOG_ROOT}/archive/micropifs-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="${LOG_PATTERN}" />
@@ -21,7 +21,7 @@
             <DefaultRolloverStrategy max="1" />
         </RollingFile>
         <RollingFile name="rollingAudit"
-                     append="false"
+                     append="true"
                      fileName="${APP_LOG_ROOT}/micropifs-audit.log"
                      filePattern="${APP_LOG_ROOT}/archive/audit/micropifs-audit-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="${LOG_PATTERN}" />
@@ -39,6 +39,10 @@
             <AppenderRef ref="Console" />
         </Root>
         <Logger name="com.dm.micropifs.MicrocamPifs" level="debug" additivity="false">
+            <AppenderRef ref="rollingLog" />
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Logger name="com.dm.micropifs.util.RestExceptionHandler" level="debug" additivity="false">
             <AppenderRef ref="rollingLog" />
             <AppenderRef ref="Console" />
         </Logger>
