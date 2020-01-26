@@ -11,6 +11,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Configuration
@@ -29,6 +32,8 @@ public class MicroConfiguration implements WebMvcConfigurer {
 
     @Value("${camera.check.seconds}")
     private int monitorCheckRate;
+
+    private Map<String, String> ipAddressMap = new HashMap<>();
 
     @PostConstruct
     void setStoragePath() {
@@ -55,8 +60,29 @@ public class MicroConfiguration implements WebMvcConfigurer {
         return camBufferSize;
     }
 
-    public int getCameTimeout() {return cameTimeout;}
+    public int getCameTimeout() {
+        return cameTimeout;
+    }
 
-    public int getMonitorCheckRate() {return monitorCheckRate;}
+    public int getMonitorCheckRate() {
+        return monitorCheckRate;
+    }
+
+    public Map<String, String> getIpAddressMap() {
+        return ipAddressMap;
+    }
+
+    public String getCamId(String camIp) {
+        String id = ipAddressMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey)).get(camIp);
+        if (null == id) id = "unknown";
+        return id;
+    }
+
+    public String getCamIp(String camId) {
+        String ip = ipAddressMap.get(camId);
+        if (null == ip) ip = "unknown";
+        return ip;
+    }
 }
 

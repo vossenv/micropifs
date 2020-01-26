@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -46,7 +49,8 @@ public class DataStore {
             audit.trace("Updating " + camID + "from internal API");
             cameraMap.get(camID).addImage(image);
         } else {
-            audit.info("New device discovered! Creating entry from internal API for " + camID + " Map size: " + String.valueOf(cameraMap.size() + 1));
+            mc.getIpAddressMap().put(camID, "LLoyd Remote");
+            audit.info("New device discovered! Creating entry from internal API for " + camID + " Map size: " + (cameraMap.size() + 1));
             cameraMap.put(camID, new PiCamera(bufferSize, camID, image));
         }
     }
@@ -56,8 +60,10 @@ public class DataStore {
             audit.trace(el.getRequestProcess("Updating '" + camID + "'", file, request));
             return cameraMap.get(camID).addImage(new PiImage(request, file, camID));
         } else {
-            audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request) + " Map size: " + String.valueOf(cameraMap.size() + 1));
-            cameraMap.put(camID, new PiCamera(bufferSize, camID, new PiImage(request, file, camID)));
+            String ip = request.getRemoteAddr();
+            mc.getIpAddressMap().put(camID, ip);
+            audit.info(el.getRequestProcess("New device discovered! Creating entry for " + camID, file, request) + " Map size: " + (cameraMap.size() + 1));
+            cameraMap.put(camID, new PiCamera(bufferSize, camID, ip, new PiImage(request, file, camID)));
             return 1;
         }
     }
@@ -80,7 +86,7 @@ public class DataStore {
         new File(path).mkdirs();
         String fullpath = path + sep + file.getOriginalFilename();
 
-        this.totalData = this.totalData.add(el.getFileSize(file));
+        this.totalData = this.totalData.add(el.getFileSize(file.getSize()));
         audit.info(el.getRequestProcess("Video upload to " + prepend, file, request) + " ---> total data = " + this.totalData.setScale(3, RoundingMode.HALF_UP).toString() + " MB");
 
         file.transferTo(new File(fullpath));
@@ -105,6 +111,8 @@ public class DataStore {
         for (String f : path.split(pattern)) if (!f.isEmpty()) dirs.add(f);
         return dirs;
     }
+
+
 
 }
 

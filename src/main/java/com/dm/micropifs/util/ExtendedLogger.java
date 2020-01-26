@@ -1,5 +1,6 @@
 package com.dm.micropifs.util;
 
+import com.dm.micropifs.MicroConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +11,12 @@ import java.math.RoundingMode;
 
 @Component
 public class ExtendedLogger {
+
+    final MicroConfiguration mc;
+
+    public ExtendedLogger(MicroConfiguration mc) {
+        this.mc = mc;
+    }
 
 
     private String getFileString(MultipartFile file) {
@@ -49,8 +56,9 @@ public class ExtendedLogger {
         String requestURI = request.getRequestURI();
         String requestType = request.getMethod();
         String remoteIP = request.getRemoteAddr();
+        String camId = mc.getCamId(remoteIP);
 
-        return requestType + " request from " + remoteIP + " on " + requestURI;
+        return requestType + " request from " + remoteIP + "/" + camId + " on " + requestURI;
     }
 
     final public String getRequestError(HttpServletRequest request, Exception e) {

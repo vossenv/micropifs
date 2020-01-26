@@ -28,13 +28,15 @@ public class MicroController {
 
     private final ExtendedLogger el;
     private final DataStore ds;
+    private final MicroConfiguration mc;
     private final static Logger logger = LogManager.getLogger(MicrocamPifs.class);
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
 
     @Inject
-    public MicroController(ExtendedLogger el, DataStore ds) {
+    public MicroController(ExtendedLogger el, DataStore ds, MicroConfiguration mc) {
         this.el = el;
         this.ds = ds;
+        this.mc = mc;
     }
 
     @ResponseBody
@@ -49,6 +51,12 @@ public class MicroController {
     public String check(HttpServletRequest request) {
         logger.info(el.getRequestString(request) + ": Status returned true");
         return "true";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/iplist"}, method = RequestMethod.GET)
+    public Object iplist() {
+        return mc.getIpAddressMap();
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

@@ -10,13 +10,18 @@ public class PiCamera {
     private List<PiImage> store;
     private int bufferSize;
     private String camID;
+    private String lastIP;
     private int total = 0;
     private long lastTime = System.currentTimeMillis();
 
-
     public PiCamera(int bufferSize, String camID, PiImage init) {
+        this(bufferSize, camID, "unknown", init);
+    }
+
+    public PiCamera(int bufferSize, String camID, String lastIP, PiImage init){
         this.bufferSize = bufferSize;
         this.camID = camID;
+        this.lastIP = lastIP;
         this.store = new Deque<>(bufferSize);
         this.store.add(init);
     }
@@ -36,6 +41,14 @@ public class PiCamera {
 
     public String getCamID() {return camID;}
 
+    public String getLastIP() {
+        return lastIP;
+    }
+
+    public void setLastIP(String lastIP) {
+        this.lastIP = lastIP;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,7 +60,8 @@ public class PiCamera {
         if (total != piCamera.total) return false;
         if (lastTime != piCamera.lastTime) return false;
         if (!Objects.equals(store, piCamera.store)) return false;
-        return Objects.equals(camID, piCamera.camID);
+        if (!Objects.equals(camID, piCamera.camID)) return false;
+        return Objects.equals(lastIP, piCamera.lastIP);
     }
 
     @Override
@@ -55,6 +69,7 @@ public class PiCamera {
         int result = store != null ? store.hashCode() : 0;
         result = 31 * result + bufferSize;
         result = 31 * result + (camID != null ? camID.hashCode() : 0);
+        result = 31 * result + (lastIP != null ? lastIP.hashCode() : 0);
         result = 31 * result + total;
         result = 31 * result + (int) (lastTime ^ (lastTime >>> 32));
         return result;
