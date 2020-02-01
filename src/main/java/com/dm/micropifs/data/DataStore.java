@@ -55,7 +55,8 @@ public class DataStore {
     }
 
     public Object updateCam(HttpServletRequest request, MultipartFile file, String camID) throws Exception {
-        mc.getIpAddressMap().put(camID, request.getRemoteAddr());
+        String remoteIP = MicroConfiguration.getClientIpAddress(request);
+        mc.getIpAddressMap().put(camID, remoteIP);
         if (cameraMap.containsKey(camID)) {
             return cameraMap.get(camID).addImage(new PiImage(request, file, camID));
         } else {

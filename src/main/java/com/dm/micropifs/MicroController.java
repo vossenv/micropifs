@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MicroController {
     private final MicroConfiguration mc;
     private final static Logger logger = LogManager.getLogger(MicrocamPifs.class);
     private final static Logger audit = LogManager.getLogger("DataStore.Audit");
+    private int counter = 0;
 
     @Inject
     public MicroController(ExtendedLogger el, DataStore ds, MicroConfiguration mc) {
@@ -42,6 +44,7 @@ public class MicroController {
     @ResponseBody
     @RequestMapping(value = {"/status"}, method = RequestMethod.GET)
     public String status(HttpServletRequest request) {
+        logger.info("Status check recieved at " + LocalDateTime.now().toString());
         logger.info(el.getRequestString(request) + ": Status returned true");
         return "version 1.0";
     }
@@ -84,7 +87,16 @@ public class MicroController {
     @ResponseBody
     @RequestMapping(value = "/cameras/{camID}/update", method = RequestMethod.POST, produces = "application/json")
     public Object updateCameraDeque(@RequestParam MultipartFile file, HttpServletRequest request, @PathVariable("camID") String camID) {
+
+
+
         try {
+//            counter += 1;
+//            if (counter == 1500){
+//                logger.info("Request recieved at " + LocalDateTime.now().toString());
+//                counter = 0;
+//            }
+
             camID = camID.toLowerCase();
             return "Success --> total count for '" + camID + "' is " + ds.updateCam(request, file, camID).toString();
         } catch (Exception e) {

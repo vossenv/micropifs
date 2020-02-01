@@ -55,7 +55,7 @@ public class ExtendedLogger {
 
         String requestURI = request.getRequestURI();
         String requestType = request.getMethod();
-        String remoteIP = request.getRemoteAddr();
+        String remoteIP = MicroConfiguration.getClientIpAddress(request);
         String camId = mc.getCamId(remoteIP);
 
         return requestType + " request from " + remoteIP + "/" + camId + " on " + requestURI;
