@@ -92,14 +92,18 @@ public class DataStore {
     }
 
     public static String fixPath(String path) {
+
         String pathOut = path
-                .replace("\\", File.separator)
                 .replace("/", File.separator)
                 .replace("\"", "")
                 .replace("'", "");
 
-        pathOut = String.join(File.separator, splitPath(pathOut));
-        audit.trace("Correcting path: " + path + " to " + pathOut);
+        if (!path.startsWith("\\\\")) {
+            pathOut = pathOut.replace("\\", File.separator);
+            pathOut = String.join(File.separator, splitPath(pathOut));
+            audit.trace("Correcting path: " + path + " to " + pathOut);
+        }
+
         return pathOut;
     }
 
@@ -109,7 +113,6 @@ public class DataStore {
         for (String f : path.split(pattern)) if (!f.isEmpty()) dirs.add(f);
         return dirs;
     }
-
 
 
 }
